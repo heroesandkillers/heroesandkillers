@@ -1,0 +1,16 @@
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN" "http://java.sun.com/j2ee/dtd/web-jsptaglibrary_1_2.dtd">
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>1.2</jsp-version>
+    <uri>/WEB-INF/tlds/taglib</uri>
+    
+    <tag>
+        <name>m</name>
+        <tag-class>util.Lang</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>key</name>
+            <required>true</required>
+        </attribute>
+    </tag>
+</taglib>

@@ -1,0 +1,106 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.configuration.xml.reload" value="true" />
+
+    <!-- Configuration for the default package. -->
+    <package name="paths" namespace="" extends="struts-default">
+        
+        <action name="">
+            <result>pages/index.jsp</result>
+        </action>
+        
+        <action name="in" class="control.gets.GetAll">
+            <result name="success">pages/base.html</result>
+            <result name="error" type="redirect">/</result>
+        </action>
+        
+        <action name="base">
+            <result>pages/base.html</result>
+        </action>
+
+        
+        <action name="admin" class="control.struts.Administrar">
+            <result name="success">pages/administrar.jsp</result>
+            <result name="error">pages/index.jsp</result>
+        </action>
+        
+        <!--INICIO ADMINISTRAR-->
+        <action name="reiniciar" class="control.struts.Administrar" method="reiniciar">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+        
+        <action name="reiniciarPrecios" class="control.struts.Administrar" method="reiniciarPrecios">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+
+        <action name="probarEntreno" class="control.struts.Administrar" method="probarEntreno">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+        
+        <action name="probarMazmorras" class="control.struts.Administrar" method="probarMazmorras">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+        
+        <action name="llenarMazmorras" class="control.struts.Administrar" method="llenarMazmorras">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+        
+        <action name="vaciarBatallas" class="control.struts.Administrar" method="vaciarBatallas">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+        
+        <action name="vaciarUltimasBatallas" class="control.struts.Administrar" method="vaciarUltimasBatallas">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+        
+        <action name="activarUsuarios" class="control.struts.Administrar" method="activarUsuarios">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+        
+        <action name="anularBatallas" class="control.struts.Administrar" method="anularBatallas">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+        
+        <action name="vaciarPuntuaciones" class="control.struts.Administrar" method="vaciarPuntuaciones">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>     
+        
+        <action name="eliminarBatallas" class="control.struts.Administrar" method="eliminarBatallas">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>  
+        
+        <action name="rectificarPremios" class="control.struts.Administrar" method="rectificarPremios">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+        
+        <action name="saveEvol" class="control.struts.Administrar" method="saveEvol">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>
+        
+        <action name="updateEvol" class="control.struts.Administrar" method="updateEvol">
+            <result name="success" type="redirect">/admin</result>
+            <result name="error">/game/pages/index.jsp</result>
+        </action>        
+        <!--FIN ADMINISTRAR-->
+    </package>
+    
+    <include file="struts-json.xml"></include>
+    
+</struts>

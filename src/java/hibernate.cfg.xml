@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+ <!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <property name="hibernate.jdbc.batch_size">
+            50
+        </property>
+   
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <!--<property name="hibernate.current_session_context_class">thread</property>-->
+        
+        <property name="connection.datasource">jdbc/hak</property>
+        <!--<property name="connection.datasource">java:comp/env/jdbc/hak</property>-->
+
+        <mapping class="model.hibernate.Tiempo" />
+        <mapping class="model.hibernate.Division" />
+        <mapping class="model.hibernate.Usuario" />
+        <mapping class="model.hibernate.Batalla" />
+        <mapping class="model.hibernate.Criatura" />        
+        <mapping class="model.hibernate.Trofeo" />
+        <mapping class="model.hibernate.Traspaso" />
+        <mapping class="model.hibernate.CriaturaAcademia" />
+        <mapping class="model.hibernate.CriaturaMazmorra" />
+        <mapping class="model.hibernate.CriaturaPrecio" />
+        <mapping class="model.hibernate.MensajeUsuario" />
+        <mapping class="model.hibernate.MensajeJuego" />
+        <mapping class="model.hibernate.MensajePrensa" />
+        
+        <mapping class="model.hibernate.Phpbb_user" />
+        <mapping class="model.hibernate.Wiki_text" />
+        <mapping class="model.hibernateLang.Wiki_en_page" />
+
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,299 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.configuration.xml.reload" value="true" />
+    <!--<constant name="struts.action.extension" value="game"/>--> 
+   
+    <package name="json" namespace="/" extends="json-default">
+        
+        <action name="getAll" class="control.gets.GetAll">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getLiga" class="control.gets.GetLiga">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="log" class="control.ajax.login">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="logMovil" class="control.ajax.loginMovil">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getEntreno" class="control.gets.GetEntreno">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getEquipo" class="control.ajax.CriaturasAction" method="GetEquipo">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getEquipoContacto" class="control.ajax.CriaturasAction" method="GetEquipoContacto">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getEquipoAcademia" class="control.ajax.CriaturasAction" method="GetEquipoAcademia">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+
+        <action name="getTraspasos" class="control.gets.GetTraspasos">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getMisPujas" class="control.ajax.CriaturasAction" method="getMisPujas">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getMazmorrasRango" class="control.ajax.CriaturasAction" method="getMazmorrasRango">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getBatallasAcademia" class="control.gets.GetBatallasAcademia">
+            <result name="success" type="json"> 
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getBatallasCalculo" class="control.gets.GetBatallasCalculo">
+            <result name="success" type="json"> 
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getBatalla" class="control.gets.GetBatalla">
+            <result name="success" type="json"> 
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+                
+        <action name="setResultadosBatallas" class="control.sets.SetResultadosBatallas">
+            <result name="success" type="json">
+                <param name="root">response</param>
+            </result>
+        </action>
+        
+        <action name="setDenuncia" class="control.sets.SetDenuncia">
+            <result type="httpheader">
+                <param name="status">200</param>
+            </result>
+        </action>
+        
+        <action name="asignarApodo" class="control.ajax.AsignarApodo">
+            <result type="httpheader">
+                <param name="status">200</param>
+            </result>
+        </action>
+        
+        <action name="pujar" class="control.ajax.Pujar">
+            <result name="success" type="json" >
+                <param name="root">result</param>
+            </result>
+        </action>
+        
+        <action name="vender" class="control.ajax.Vender">
+            <result name="success" type="json" >
+                <param name="root">result</param>
+            </result>
+        </action>
+        
+        <action name="expulsar" class="control.ajax.Expulsar">
+            <result name="success" type="json" >
+                <param name="root">response</param>
+            </result>
+        </action>
+        
+        <action name="ocultar" class="control.ajax.OcultarValor">
+            <result name="success" type="json" >
+                <param name="root">response</param>
+            </result>
+        </action>
+        
+        <action name="asignarEntreno" class="control.ajax.AsignarEntreno">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+            <result name="error">pages/index.jsp</result>
+        </action>
+        
+        <action name="getPerfil" class="control.gets.GetPerfil" method="GetPerfil">
+            <result name="success" type="json">
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getPerfilContacto" class="control.gets.GetPerfilContacto">
+            <result name="success" type="json">
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getTiempos" class="control.gets.GetTiempos">
+            <result name="success" type="json">
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getTrofeos" class="control.gets.GetTrofeos">
+            <result name="success" type="json">
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getCalendarioDivision" class="control.ajax.CalendarioAction" method="GetCalendarioDivision">
+            <result name="success" type="json">
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getCalendario" class="control.ajax.CalendarioAction" method="GetCalendario">
+            <result name="success" type="json">
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="asignarAlineacion" class="control.ajax.AsignarAlineacion">
+            <result name="success" type="json">
+                <param name="root">response</param>
+            </result>
+        </action>
+        
+        <action name="asignarAlineacionAcademia" class="control.ajax.AsignarAlineacionAcademia">
+            <result name="success" type="json">
+                <param name="root">response</param>
+            </result>
+        </action>
+        
+        
+        <action name="ampliar" class="control.ajax.Ampliar">
+            <result name="success" type="json">
+                <param name="root">response</param>
+            </result>
+        </action>
+        
+        <action name="cambioGraficos" class="control.ajax.CambioGraficos">
+            <result type="httpheader">
+                <param name="status">200</param>
+            </result>
+        </action>
+        
+        <!--MENSAJES-->
+        <action name="marcarMensajeLeidoUsuario" class="control.ajax.MensajeAction" method="marcarMensajeLeidoUsuario">
+            <result type="httpheader">
+                <param name="status">200</param>
+            </result>
+        </action>
+        
+        <action name="marcarMensajeLeidoJuego" class="control.ajax.MensajeAction" method="marcarMensajeLeidoJuego">
+            <result type="httpheader">
+                <param name="status">200</param>
+            </result>
+        </action>
+        
+        <action name="enviarMensajePrensa" class="control.ajax.MensajeAction" method="enviarMensajePrensa">
+            <result type="httpheader">
+                <param name="status">200</param>
+            </result>
+        </action>
+        
+        <action name="enviarMensajeUsuario" class="control.ajax.MensajeAction" method="enviarMensajeUsuario">
+            <result type="httpheader">
+                <param name="status">200</param>
+            </result>
+        </action>
+        
+        <action name="getMensajesPrensa" class="control.ajax.MensajeAction" method="getMensajesPrensa">
+            <result name="success" type="json">
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getMensajesPrivados" class="control.ajax.MensajeAction" method="getMensajesPrivados">
+            <result name="success" type="json">
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getPosicionAbsoluta" class="control.gets.GetEstadisticas" method="posicionAbsoluta">
+            <result name="success" type="json">
+                <param name="root">response</param>
+            </result>
+        </action>
+        
+        <action name="getMediaCriaturas" class="control.gets.GetEstadisticas" method="mediaCriaturas">
+            <result name="success" type="json">
+                <param name="root">response</param>
+            </result>
+        </action>
+        
+        <action name="getNumeroUsuarios" class="control.gets.GetEstadisticas" method="numeroUsuarios">
+            <result name="success" type="json">
+                <param name="root">response</param>
+            </result>
+        </action>
+        
+        <action name="getNumeroCriaturas" class="control.gets.GetEstadisticas" method="numeroCriaturas">
+            <result name="success" type="json">
+                <param name="root">response</param>
+            </result>
+        </action>
+        
+        <action name="getDivisiones" class="control.ajax.DivisionesAction" method="GetDivisiones">
+            <result name="success" type="json">
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="getDivision" class="control.gets.GetDivision">
+            <result name="success" type="json">
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="setMapa" class="control.sets.SetMapa">
+            <result type="httpheader">
+                <param name="status">200</param>
+            </result>
+        </action>
+        
+        <action name="logout" class="control.ajax.logout">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+        <action name="clearOldBatallas" class="control.ajax.CalendarioAction" method="clearOldBatallas">
+            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
+        </action>
+        
+    </package>
+    
+</struts>
