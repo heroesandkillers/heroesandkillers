@@ -1,4 +1,4 @@
-build/*
-dist/*
-text/*
+#build/*
+#dist/*
+#text/*
 #nbproject/private
