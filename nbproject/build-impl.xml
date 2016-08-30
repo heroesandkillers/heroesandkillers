@@ -794,7 +794,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         </macrodef>
     </target>
     <target name="-init-taskdefs">
-        <property name="libs.CopyLibs.classpath" value="bin/copylibstask.jar"/>
+        <!--<property name="libs.CopyLibs.classpath" value="bin/copylibstask.jar"/>-->
         <property name="libs.CopyLibs.classpath" value="/root/code/org-netbeans-modules-java-j2seproject-copylibstask.jar"/>        
         
         <fail unless="libs.CopyLibs.classpath">
