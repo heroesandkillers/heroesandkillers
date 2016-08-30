@@ -807,7 +807,8 @@ exists or setup the property manually. For example like this:
         <!--<taskdef classpath="${libs.CopyLibs.classpath}" resource="org/netbeans/modules/java/j2seproject/copylibstask/antlib.xml"/>-->
         <taskdef >
             <classpath>
-                <pathelement location="/usr/share/java/lib/ant-contrib-1.0b3.jar"/>
+                <!--<pathelement location="/usr/share/java/lib/ant-contrib-1.0b3.jar"/>-->
+                <pathelement location="/root/code/org-netbeans-modules-java-j2seproject-copylibstask.jar"/>
             </classpath>
         </taskdef>
     </target>
