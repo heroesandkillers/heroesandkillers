@@ -806,13 +806,13 @@ exists or setup the property manually. For example like this:
  ant -Dlibs.CopyLibs.classpath=a/path/to/org-netbeans-modules-java-j2seproject-copylibstask.jar
                 </fail>
         <!--<taskdef classpath="${libs.CopyLibs.classpath}" resource="org/netbeans/modules/java/j2seproject/copylibstask/antlib.xml"/>-->
-        <taskdef resource="net/sf/antcontrib/antlib.xml">
-        <!--<taskdef >-->
+<!--        <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <taskdef >
             <classpath>
-                <!--<pathelement location="/usr/share/java/lib/ant-contrib-1.0b3.jar"/>-->
+                <pathelement location="/usr/share/java/lib/ant-contrib-1.0b3.jar"/>
                 <pathelement location="/root/code/org-netbeans-modules-java-j2seproject-copylibstask.jar"/>
             </classpath>
-        </taskdef>
+        </taskdef>-->
     </target>
     <target name="-init-ap-cmdline-properties">
         <property name="annotation.processing.enabled" value="true"/>
