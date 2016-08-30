@@ -2,5 +2,5 @@
 #dist/*
 #text/*
 nbproject/private
-/dist/
-/build/
+#/dist/
+#/build/
