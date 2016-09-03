@@ -10,22 +10,22 @@
     <package name="paths" namespace="" extends="struts-default">
         
         <action name="">
-            <result>pages/index.jsp</result>
+            <result>/pages/index.jsp</result>
         </action>
         
         <action name="in" class="control.gets.GetAll">
-            <result name="success">pages/base.html</result>
+            <result name="success">/pages/base.html</result>
             <result name="error" type="redirect">/</result>
         </action>
         
         <action name="base">
-            <result>pages/base.html</result>
+            <result>/pages/base.html</result>
         </action>
 
         
         <action name="admin" class="control.struts.Administrar">
-            <result name="success">pages/administrar.jsp</result>
-            <result name="error">pages/index.jsp</result>
+            <result name="success">/pages/administrar.jsp</result>
+            <result name="error">/pages/index.jsp</result>
         </action>
         
         <!--INICIO ADMINISTRAR-->
