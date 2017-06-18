@@ -8,7 +8,7 @@
     <!--<constant name="struts.action.extension" value="game"/>--> 
    
     <!--<package name="json" namespace="/" extends="json-default">-->
-    <package name="paths" namespace="" extends="struts-default">
+    <package name="json" namespace="" extends="struts-default">
         
         <action name="getAll" class="control.gets.GetAll">
             <result name="success" type="json" >
