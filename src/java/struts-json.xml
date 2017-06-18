@@ -9,7 +9,7 @@
    
     <!--<package name="json" namespace="/" extends="json-default">-->
     <!--<package name="json" namespace="">-->
-    <package name="json-default" extends="struts-default">
+    <package name="json-default" extends="struts-default" namespace="/" >
         
         <action name="getAll" class="control.gets.GetAll">
             <result name="success" type="json" >
