@@ -5,9 +5,12 @@
 <struts>
     <constant name="struts.devMode" value="true" />
     <constant name="struts.configuration.xml.reload" value="true" />
-
-    <package name="json" extends="json-default">
-
+    <!--<constant name="struts.action.extension" value="game"/>--> 
+   
+    <!--<package name="json" namespace="/" extends="json-default">-->
+    <!--<package name="json" namespace="">-->
+    <package name="json-default" extends="struts-default" namespace="/" >
+        
         <action name="getAll" class="control.gets.GetAll">
             <result name="success" type="json" >
                 <param name="root">mapaJSON</param>
@@ -20,9 +23,12 @@
             </result>
         </action>
         
-<!--        <action name="log" class="control.ajax.login">
+        <action name="log" class="control.ajax.login">
+<!--            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>-->
             <result type="json" />
-        </action>-->
+        </action>
         
         <action name="logMovil" class="control.ajax.loginMovil">
             <result name="success" type="json" >
