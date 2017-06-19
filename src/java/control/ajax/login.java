@@ -29,7 +29,7 @@ public class login {
             Map login = ActionContext.getContext().getSession();
             login.put("admin", "true");
             mapaJSON = Login(id, key2);
-            return SUCCESS;
+//            return SUCCESS;
 //            return mapaJSON;
         } else if (id > 2) {
             mapaJSON = Login(id, key2);
