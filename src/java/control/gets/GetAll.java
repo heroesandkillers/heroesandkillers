@@ -31,12 +31,17 @@ public class GetAll extends ActionSupport {
         } catch (Exception e) {
             Gson gson = new Gson();
             mapaJSON = "ActionContext.getContext().getSession().get('usuario') = " + e + "." + gson.toJson(ActionContext.getContext().getSession());
-            if(e.toString().contains("java.lang.NullPointerException")){
-                
+            if (e.toString().contains("java.lang.NullPointerException")) {
+
             }
             return SUCCESS;
         }
-        mapaJSON = getAll(userId);
+        
+        try {
+            mapaJSON = getAll(userId);
+        } catch (Exception e) {
+            mapaJSON = e.toString();
+        }
         return SUCCESS;
     }
 
