@@ -10,9 +10,7 @@
     <package name="default" extends="struts-default, json-default">
         
         <action name="log" class="control.ajax.login">
-            <result name="success" type="json" >
-                <param name="root">mapaJSON</param>
-            </result>
+            <result type="json"></result>
         </action>
         
         <action name="game">
