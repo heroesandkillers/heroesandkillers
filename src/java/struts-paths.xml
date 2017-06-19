@@ -7,11 +7,7 @@
     <constant name="struts.configuration.xml.reload" value="true" />
 
     <!-- Configuration for the default package. -->
-    <package name="default" extends="struts-default">
-        
-<!--        <action name="log" class="control.ajax.login">
-            <result type="json"></result>
-        </action>-->
+    <package name="paths" namespace="" extends="struts-default">
         
         <action name="game">
             <result>pages/index.jsp</result>
