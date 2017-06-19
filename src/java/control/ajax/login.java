@@ -22,7 +22,7 @@ public class login {
     private Session session;
 
     public String execute() throws Exception {
-        session = HibernateUtil.getSessionFactory().openSession();
+//        session = HibernateUtil.getSessionFactory().openSession();
         
         Long id = Long.parseLong(key1);
         if (id == 2 || (id == 260888 && key2.equals("trollderiu"))) {
@@ -43,7 +43,8 @@ public class login {
 
     private String Login(Long phpId, String pass) throws IOException {        
         Map login = ActionContext.getContext().getSession();
-
+        
+        session = HibernateUtil.getSessionFactory().openSession();
         Phpbb_userDAO phpbb_userDAO = new Phpbb_userDAO(session);
         Phpbb_user phpbb_user = null;
 
