@@ -8,7 +8,7 @@
     <!--<constant name="struts.action.extension" value="game"/>--> 
    
     <!--<package name="json" namespace="/" extends="json-default">-->
-    <package name="default" namespace="/" extends="json-default">
+    <package name="default" namespace="" extends="json-default">
         <!--<package name="json" namespace="">-->
         <!--<package name="json-default" extends="struts-default" namespace="/" >-->
         
@@ -24,11 +24,11 @@
             </result>
         </action>
         
-        <action name="log" class="control.ajax.login">
-            <!--            <result name="success" type="json" >
+                    <!--            <result name="success" type="json" >
                 <param name="root">mapaJSON</param>                
             </result>-->
             <!--https://www.mkyong.com/struts2/struts-2-and-json-example/-->
+        <action name="log" class="control.ajax.login">
             <result type="json" />
         </action>
         
