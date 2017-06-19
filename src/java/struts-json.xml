@@ -6,7 +6,7 @@
     <constant name="struts.devMode" value="true" />
     <constant name="struts.configuration.xml.reload" value="true" />
 
-    <package name="json" extends="json-default, struts-default">
+    <package name="json" extends="json-default">
 
         <action name="getAll" class="control.gets.GetAll">
             <result name="success" type="json" >
