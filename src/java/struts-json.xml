@@ -24,9 +24,10 @@
         </action>
         
         <action name="log" class="control.ajax.login">
-            <result name="success" type="json" >
-                <param name="root">mapaJSON</param>
-            </result>
+<!--            <result name="success" type="json" >
+                <param name="root">mapaJSON</param>                
+            </result>-->
+            <result type="json" />
         </action>
         
         <action name="logMovil" class="control.ajax.loginMovil">

@@ -25,14 +25,16 @@ public class login extends ActionSupport {
             Map login = ActionContext.getContext().getSession();
             login.put("admin", "true");
             mapaJSON = Login(id, key2);
-            return SUCCESS;
+//            return SUCCESS;
+            return mapaJSON;
         } else if (id > 2) {
             mapaJSON = Login(id, key2);
         } else {
             System.out.println("login id = " + key1 + ". no log");
         }
 
-        return SUCCESS;
+//        return SUCCESS;
+        return mapaJSON;
     }
 
     public String Login(Long phpId, String pass) throws IOException {
