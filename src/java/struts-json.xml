@@ -4,7 +4,7 @@
 
 <struts>
     <constant name="struts.devMode" value="true" />
-    <!--<constant name="struts.configuration.xml.reload" value="true" />-->
+    <constant name="struts.configuration.xml.reload" value="true" />
 
     <package name="json" extends="json-default">
 
@@ -20,9 +20,9 @@
             </result>
         </action>
         
-        <action name="log" class="control.ajax.login">
+<!--        <action name="log" class="control.ajax.login">
             <result type="json" />
-        </action>
+        </action>-->
         
         <action name="logMovil" class="control.ajax.loginMovil">
             <result name="success" type="json" >
