@@ -13,7 +13,7 @@ import model.hibernate.HibernateUtil;
 import model.hibernate.Phpbb_user;
 import org.hibernate.Session;
 
-public class login extends ActionSupport {
+public class login {
 
     private String key1;
     private String key2;
