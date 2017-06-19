@@ -10,12 +10,12 @@
     <!--<package name="paths" namespace="" extends="struts-default">-->
     <package name="paths" extends="struts-default">
         
-        <action name="log" class="control.ajax.login">
+<!--        <action name="log" class="control.ajax.login">
             <result name="success" type="json" >
                 <param name="root">mapaJSON</param>
             </result>
-            <!--<result type="json" />-->
-        </action>
+            <result type="json" />
+        </action>-->
         
         <action name="game">
             <result>pages/index.jsp</result>
