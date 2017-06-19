@@ -8,6 +8,6 @@
     <constant name="struts.configuration.xml.reload" value="true" />
         
     <include file="struts-paths.xml"></include>
-    <!--<include file="struts-json.xml"></include>--> 
+    <include file="struts-json.xml"></include> 
     
 </struts>
