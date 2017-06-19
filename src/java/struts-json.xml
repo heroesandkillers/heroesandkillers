@@ -7,7 +7,7 @@
     <constant name="struts.configuration.xml.reload" value="true" />
     <!--<constant name="struts.action.extension" value="game"/>--> 
    
-    <package name="json" namespace="/" extends="json-default">
+    <package name="json" namespace="" extends="json-default">
     <!--<package name="json" namespace="">-->
     <!--<package name="json-default" extends="struts-default" namespace="/" >-->
         
