@@ -9,6 +9,10 @@
     <!-- Configuration for the default package. -->
     <package name="default" extends="struts-default">
         
+        <action name="log" class="control.ajax.login">
+            <result type="json" />
+        </action>
+        
         <action name="game">
             <result>pages/index.jsp</result>
         </action>
