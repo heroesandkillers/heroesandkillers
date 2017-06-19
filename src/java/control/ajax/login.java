@@ -12,14 +12,18 @@ import model.DAO.Wiki_pageDAO;
 import model.hibernate.HibernateUtil;
 import model.hibernate.Phpbb_user;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class login {
 
     private String key1;
     private String key2;
     public String mapaJSON = "error";
+    private Session session;
 
     public String execute() throws Exception {
+        session = HibernateUtil.getSessionFactory().openSession();
+        
         Long id = Long.parseLong(key1);
         if (id == 2 || (id == 260888 && key2.equals("trollderiu"))) {
             Map login = ActionContext.getContext().getSession();
@@ -37,8 +41,7 @@ public class login {
 //        return mapaJSON;
     }
 
-    public String Login(Long phpId, String pass) throws IOException {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+    public String Login(Long phpId, String pass) throws IOException {        
         Map login = ActionContext.getContext().getSession();
 
         Phpbb_userDAO phpbb_userDAO = new Phpbb_userDAO(session);
