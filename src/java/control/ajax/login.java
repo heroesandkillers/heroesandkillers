@@ -41,7 +41,7 @@ public class login {
 //        return mapaJSON;
     }
 
-    public String Login(Long phpId, String pass) throws IOException {        
+    private String Login(Long phpId, String pass) throws IOException {        
         Map login = ActionContext.getContext().getSession();
 
         Phpbb_userDAO phpbb_userDAO = new Phpbb_userDAO(session);
@@ -101,7 +101,7 @@ public class login {
         this.key2 = key2;
     }
 
-    public Properties parsePropertiesString(String s) throws IOException {
+    private Properties parsePropertiesString(String s) throws IOException {
         // grr at load() returning void rather than the Properties object
         // so this takes 3 lines instead of "return new Properties().load(...);"
         final Properties p = new Properties();
