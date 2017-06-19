@@ -6,6 +6,8 @@ import com.opensymphony.xwork2.ActionContext;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.DAO.Phpbb_userDAO;
 import model.DAO.UsuarioDAO;
 import model.DAO.Wiki_pageDAO;
@@ -23,7 +25,7 @@ public class login {
 
     public String execute() throws Exception {
 //        session = HibernateUtil.getSessionFactory().openSession();
-        
+
         Long id = Long.parseLong(key1);
         if (id == 2 || (id == 260888 && key2.equals("trollderiu"))) {
             Map login = ActionContext.getContext().getSession();
@@ -41,9 +43,9 @@ public class login {
 //        return mapaJSON;
     }
 
-    private String Login(Long phpId, String pass) throws IOException {        
+    private String Login(Long phpId, String pass) {
         Map login = ActionContext.getContext().getSession();
-        
+
         session = HibernateUtil.getSessionFactory().openSession();
         Phpbb_userDAO phpbb_userDAO = new Phpbb_userDAO(session);
         Phpbb_user phpbb_user = null;
@@ -72,7 +74,13 @@ public class login {
             Wiki_pageDAO wiki_pageDAO = new Wiki_pageDAO(session);
             String text = wiki_pageDAO.getWiki_text(lang);
 
-            Properties properties = parsePropertiesString(text);
+            Properties properties;
+            try {
+                properties = parsePropertiesString(text);
+            } catch (IOException ex) {
+                Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+                return "error";
+            }
             login.put("lang", properties);
 
             session.close();
