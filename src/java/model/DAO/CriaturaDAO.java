@@ -405,7 +405,7 @@ public class CriaturaDAO {
             }
         }
 
-        // INICIO DE ASIGNACION ALINEACION AUTOMÁTICO
+        // INICIO DE ASIGNACION ALINEACION AUTOMATICO
         List<Long> idList = new ArrayList<Long>();
         List<Integer> posicionList = new ArrayList<Integer>();
 
