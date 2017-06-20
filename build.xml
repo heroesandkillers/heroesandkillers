@@ -84,7 +84,7 @@
             <dependency org="org.hibernate" name="hibernate" rev="3.2.7.ga" conf="default">
                 <exclude org="javax.transaction"/>
             </dependency>
-            <dependency org="org.apache.struts" name="struts2-core" rev="2.2.3"/>
+            <!--<dependency org="org.apache.struts" name="struts2-core" rev="2.2.3"/>-->
         </ivy:cachepath>
     </target>
 
