@@ -34,7 +34,7 @@ public class login extends ActionSupport {
         } else if (id > 2) {
             mapaJSON = Login(id, key2);
         } else {
-            System.out.println("login id = " + key1 + ". no log");
+            //System.out.println("login id = " + key1 + ". no log");
         }
 
         return SUCCESS;

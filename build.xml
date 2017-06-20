@@ -11,7 +11,7 @@
 <!--https://stackoverflow.com/questions/26650590/how-to-add-dependency-to-ant-project-->
 <project name="strutsHibernate" default="default" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
     <description>Builds, tests, and runs the project strutsHibernate.</description>
-    <!--<import file="nbproject/build-impl.xml"/>-->
+    <import file="nbproject/build-impl.xml"/>
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -72,10 +72,7 @@
     -->
     
     <available classname="org.apache.ivy.Main" property="ivy.installed"/> 
-    
-    <target description="Build whole project." name="default"/>
-    <target description="Deploy to server and show in browser." name="run"/>
-    
+        
     <target name="retrieve-dependencies" description="Retrieve dependencies with Apache IVY">
         <ivy:retrieve type="jar" />
     </target>
