@@ -16,7 +16,7 @@ import model.hibernate.Phpbb_user;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class login {
+public class login extends ActionSupport {
 
     private String key1;
     private String key2;
