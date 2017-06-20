@@ -10,7 +10,8 @@
 
             $(document).ready(function() {
                 var arr = document.URL.split('/');
-                var result = arr[0] + "//" + arr[2];
+                console.log(arr);
+                var result = arr[0] + "//" + arr[2].split(":")[0]; //remove port
                 var url;
                 var width = $(document).width();
 //                var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)

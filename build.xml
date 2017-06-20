@@ -7,7 +7,9 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="strutsHibernate" default="default" basedir=".">
+
+<!--https://stackoverflow.com/questions/26650590/how-to-add-dependency-to-ant-project-->
+<project name="strutsHibernate" default="default" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
     <description>Builds, tests, and runs the project strutsHibernate.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
@@ -69,4 +71,21 @@
 
     -->
     
+    <available classname="org.apache.ivy.Main" property="ivy.installed"/> 
+
+    <target name="install-ivy" description="Install ivy" unless="ivy.installed">
+        <mkdir dir="${user.home}/.ant/lib"/>
+        <get dest="${user.home}/.ant/lib/ivy.jar" src="http://search.maven.org/remotecontent?filepath=org/apache/ivy/ivy/2.3.0/ivy-2.3.0.jar"/>
+        <fail message="Ivy has been installed. Run the build again"/>
+    </target>
+
+    <target name="resolve" depends="install-ivy" description="Use ivy to resolve classpaths">
+        <ivy:cachepath pathid="compile.path">
+            <dependency org="org.hibernate" name="hibernate" rev="3.2.7.ga" conf="default">
+                <exclude org="javax.transaction"/>
+            </dependency>
+            <dependency org="org.apache.struts" name="struts2-core" rev="2.2.3"/>
+        </ivy:cachepath>
+    </target>
+
 </project>
