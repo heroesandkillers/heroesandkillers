@@ -21,7 +21,7 @@ public class login extends ActionSupport {
     private String key1;
     private String key2;
     public String mapaJSON = "error";
-    private Session session;
+//    private Session session;
 
     public String execute() {
 //        session = HibernateUtil.getSessionFactory().openSession();
@@ -44,7 +44,7 @@ public class login extends ActionSupport {
     private String Login(Long phpId, String pass) {
         Map login = ActionContext.getContext().getSession();
 
-        session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
         Phpbb_userDAO phpbb_userDAO = new Phpbb_userDAO(session);
         Phpbb_user phpbb_user = null;
 
