@@ -23,7 +23,7 @@ public class login extends ActionSupport {
     public String mapaJSON = "error";
     private Session session;
 
-    public String execute() throws Exception {
+    public String execute() {
 //        session = HibernateUtil.getSessionFactory().openSession();
 
         Long id = Long.parseLong(key1);
