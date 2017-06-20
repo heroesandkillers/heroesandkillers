@@ -31,16 +31,14 @@ public class login {
             Map login = ActionContext.getContext().getSession();
             login.put("admin", "true");
             mapaJSON = Login(id, key2);
-//            return SUCCESS;
-//            return mapaJSON;
         } else if (id > 2) {
             mapaJSON = Login(id, key2);
         } else {
             System.out.println("login id = " + key1 + ". no log");
         }
 
-//        return SUCCESS;
-        return mapaJSON;
+        return SUCCESS;
+//        return mapaJSON;
     }
 
     private String Login(Long phpId, String pass) {
