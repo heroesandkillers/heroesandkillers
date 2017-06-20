@@ -39,8 +39,8 @@ public class login {
             System.out.println("login id = " + key1 + ". no log");
         }
 
-        return SUCCESS;
-//        return mapaJSON;
+//        return SUCCESS;
+        return mapaJSON;
     }
 
     private String Login(Long phpId, String pass) {
