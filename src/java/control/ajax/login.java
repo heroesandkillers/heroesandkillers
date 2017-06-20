@@ -77,9 +77,9 @@ public class login {
             Properties properties;
             try {
                 properties = parsePropertiesString(text);
-            } catch (IOException ex) {
-                Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
-                return "error";
+            } catch (IOException e) {
+                Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, e);
+                return e.toString();
             }
             login.put("lang", properties);
 
