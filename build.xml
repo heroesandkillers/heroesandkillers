@@ -73,6 +73,9 @@
     
     <available classname="org.apache.ivy.Main" property="ivy.installed"/> 
     
+    <target description="Build whole project." name="default"/>
+    <target description="Deploy to server and show in browser." name="run"/>
+    
     <target name="retrieve-dependencies" description="Retrieve dependencies with Apache IVY">
         <ivy:retrieve type="jar" />
     </target>
