@@ -75,10 +75,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.servlet-api-2.4.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.struts2-core-2.5.10.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
