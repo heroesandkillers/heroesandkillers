@@ -3,31 +3,13 @@
 "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-    <constant name="struts.devMode" value="true" />
+    <!--<constant name="struts.devMode" value="true" />-->
     <constant name="struts.configuration.xml.reload" value="true" />
     <!--<constant name="struts.action.extension" value="game"/>--> 
    
     <package name="json" namespace="/" extends="json-default">
         <!--<package name="json" namespace="">-->
         <!--<package name="json-default" extends="struts-default" namespace="/" >-->
-        
-<!--        <global-results>
-            <result name="input" type="json">
-                <param name="ignoreHierarchy">false</param>
-                <param name="includeProperties">actionErrors\[\d+\], fieldErrors\..+$, actionMessages\[\d+\]</param>
-            </result>
-            <result name="error" type="json">
-                <param name="ignoreHierarchy">false</param>
-                <param name="includeProperties">actionErrors\[\d+\], fieldErrors\..+$, actionMessages\[\d+\]</param>
-            </result>
-            <result name="Exception" type="json">
-                <param name="ignoreHierarchy">false</param>
-                <param name="includeProperties">actionErrors\[\d+\], fieldErrors\..+$, actionMessages\[\d+\]</param>
-            </result>
-        </global-results>
-        <global-exception-mappings>
-            <exception-mapping exception="java.lang.Throwable" result="Exception" />
-        </global-exception-mappings>-->
 
         <action name="getAll" class="control.gets.GetAll">
             <result name="success" type="json" >
