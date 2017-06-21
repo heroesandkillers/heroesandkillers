@@ -24,7 +24,8 @@ public class login extends ActionSupport {
 //    private Session session;
 
     public String execute() {
-        return "123";
+        return SUCCESS;
+//        return "123";
 ////        session = HibernateUtil.getSessionFactory().openSession();
 //
 //        Long id = Long.parseLong(key1);
