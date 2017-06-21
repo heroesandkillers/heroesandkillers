@@ -74,6 +74,7 @@
     <available classname="org.apache.ivy.Main" property="ivy.installed"/> 
         
     <target name="retrieve-dependencies" description="Retrieve dependencies with Apache IVY">
+        <ivy:settings file="ivysettings.xml" />
         <ivy:retrieve type="jar" />
     </target>
     
