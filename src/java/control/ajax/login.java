@@ -43,7 +43,7 @@ public class login extends ActionSupport {
 //        return mapaJSON;
     }
 
-    private String Login(Long phpId, String pass) {
+    public String Login(Long phpId, String pass) throws IOException {
         Map login = ActionContext.getContext().getSession();
 
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -110,7 +110,7 @@ public class login extends ActionSupport {
         this.key2 = key2;
     }
 
-    private Properties parsePropertiesString(String s) throws IOException {
+    public Properties parsePropertiesString(String s) throws IOException {
         // grr at load() returning void rather than the Properties object
         // so this takes 3 lines instead of "return new Properties().load(...);"
         final Properties p = new Properties();
