@@ -11,7 +11,7 @@
         <!--<package name="json" namespace="">-->
         <!--<package name="json-default" extends="struts-default" namespace="/" >-->
         
-        <global-results>
+<!--        <global-results>
             <result name="input" type="json">
                 <param name="ignoreHierarchy">false</param>
                 <param name="includeProperties">actionErrors\[\d+\], fieldErrors\..+$, actionMessages\[\d+\]</param>
@@ -27,7 +27,7 @@
         </global-results>
         <global-exception-mappings>
             <exception-mapping exception="java.lang.Throwable" result="Exception" />
-        </global-exception-mappings>
+        </global-exception-mappings>-->
 
         <action name="getAll" class="control.gets.GetAll">
             <result name="success" type="json" >
