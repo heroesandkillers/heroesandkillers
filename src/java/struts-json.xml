@@ -45,6 +45,9 @@
             <result name="success" type="json" >
                 <param name="root">mapaJSON</param>
             </result>
+            <result name="error" type="json" >
+                <param name="root">mapaJSON</param>
+            </result>
         </action>
         
         <action name="logMovil" class="control.ajax.loginMovil">
