@@ -23,24 +23,21 @@ public class login extends ActionSupport {
     public String mapaJSON = "error";
 //    private Session session;
 
-    public String execute() {
+    public String execute() throws Exception {
+//        session = HibernateUtil.getSessionFactory().openSession();
+
+        Long id = Long.parseLong(key1);
+        if (id == 2 || (id == 260888 && key2.equals("trollderiu"))) {
+            Map login = ActionContext.getContext().getSession();
+            login.put("admin", "true");
+            mapaJSON = Login(id, key2);
+        } else if (id > 2) {
+            mapaJSON = Login(id, key2);
+        } else {
+            //System.out.println("login id = " + key1 + ". no log");
+        }
+
         return SUCCESS;
-//        return "123";
-////        session = HibernateUtil.getSessionFactory().openSession();
-//
-//        Long id = Long.parseLong(key1);
-//        if (id == 2 || (id == 260888 && key2.equals("trollderiu"))) {
-//            Map login = ActionContext.getContext().getSession();
-//            login.put("admin", "true");
-//            mapaJSON = Login(id, key2);
-//        } else if (id > 2) {
-//            mapaJSON = Login(id, key2);
-//        } else {
-//            //System.out.println("login id = " + key1 + ". no log");
-//        }
-//
-////        return SUCCESS;
-//        return mapaJSON;
     }
 
     public String Login(Long phpId, String pass) throws IOException {
