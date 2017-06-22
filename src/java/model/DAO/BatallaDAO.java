@@ -557,7 +557,7 @@ public class BatallaDAO {
     public Batalla getUltimaBatalla(Usuario user) {
         UsuarioDAO usuarioDAO = new UsuarioDAO(session);
         if (null == user) {
-            user = usuarioDAO.getUsuario(0);
+            user = usuarioDAO.getUsuario();
         }
 
         int now = (int) (new Date().getTime() / 1000);

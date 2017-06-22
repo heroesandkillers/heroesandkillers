@@ -31,6 +31,11 @@ public class UsuarioDAO {
         }
     }
 
+    public Usuario getUsuario() {
+        int id = (Integer) ActionContext.getContext().getSession().get("usuario");
+        return getUsuario(id);
+    }
+
     public Usuario loadUsuario(int id) {
         Transaction t = session.beginTransaction();
         Usuario usuario = (Usuario) session.load(Usuario.class, id);
@@ -39,10 +44,6 @@ public class UsuarioDAO {
     }
 
     public Usuario getUsuario(int id) {
-        if (0 == id) {
-            id = (Integer) ActionContext.getContext().getSession().get("usuario");
-        }
-        
         Transaction t = session.beginTransaction();
         Usuario usuario = (Usuario) session.get(Usuario.class, id);
         usuario.username = getName(usuario);
