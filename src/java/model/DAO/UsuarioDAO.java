@@ -1,5 +1,6 @@
 package model.DAO;
 
+import com.opensymphony.xwork2.ActionContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +39,10 @@ public class UsuarioDAO {
     }
 
     public Usuario getUsuario(int id) {
+        if (0 == id) {
+            id = (Integer) ActionContext.getContext().getSession().get("usuario");
+        }
+        
         Transaction t = session.beginTransaction();
         Usuario usuario = (Usuario) session.get(Usuario.class, id);
         usuario.username = getName(usuario);

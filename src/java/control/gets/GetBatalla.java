@@ -3,6 +3,7 @@ package control.gets;
 import model.DAO.BatallaDAO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import model.hibernate.*;
 import java.util.List;
@@ -11,14 +12,21 @@ import org.hibernate.Session;
 public class GetBatalla extends ActionSupport {
 
     public String mapaJSON = "error";
-    private int id;
+    private Integer id;
 
     @Override
     public String execute() throws Exception {
         Gson gson = new Gson();
         Session session = HibernateUtil.getSessionFactory().openSession();
         BatallaDAO batallaDAO = new BatallaDAO(session);
-        Batalla batalla = batallaDAO.getBatalla(id);
+        
+        Batalla batalla;
+        if(null != id){
+            batalla = batallaDAO.getBatalla(id);
+        }else{
+            batalla = batallaDAO.getUltimaBatalla(null);        
+        }
+        
         session.flush();
 
         if (batalla.getTipo().equals("academia")) {

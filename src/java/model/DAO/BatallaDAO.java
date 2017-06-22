@@ -2,6 +2,7 @@ package model.DAO;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.opensymphony.xwork2.ActionContext;
 import java.util.*;
 import model.hibernate.Batalla;
 import model.hibernate.Division;
@@ -544,17 +545,21 @@ public class BatallaDAO {
         return list;
     }
 
-    public Usuario getUltimoEnemigo(Usuario yo) {
-        Batalla batalla = getUltimaBatalla(yo);
-
-        if (yo == batalla.getEqLoc()) {
-            return batalla.getEqVis();
-        } else {
-            return batalla.getEqLoc();
-        }
-    }
-
+//    public Usuario getUltimoEnemigo(Usuario yo) {
+//        Batalla batalla = getUltimaBatalla(yo);
+//
+//        if (yo == batalla.getEqLoc()) {
+//            return batalla.getEqVis();
+//        } else {
+//            return batalla.getEqLoc();
+//        }
+//    }
     public Batalla getUltimaBatalla(Usuario user) {
+        UsuarioDAO usuarioDAO = new UsuarioDAO(session);
+        if (null == user) {
+            user = usuarioDAO.getUsuario(0);
+        }
+
         int now = (int) (new Date().getTime() / 1000);
 
         String peticion = "FROM Batalla WHERE fecha = (SELECT max(fecha) FROM Batalla WHERE fecha < " + now + " eqLoc = " + user.getId() + " OR eqLoc = " + user.getId() + ") "
