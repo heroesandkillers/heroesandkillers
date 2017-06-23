@@ -13,7 +13,7 @@
                 console.log(arr);
                 var result = arr[0] + "//" + arr[2].split(":")[0]; //remove port
                 var url;
-                var width = $(document).width();
+//                var width = $(document).width();
 //                var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
 //                console.log("java document width: " + width);
 //                if (width >= 760) {
