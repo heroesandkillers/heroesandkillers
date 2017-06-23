@@ -24,7 +24,7 @@ public class GetBatalla extends ActionSupport {
         if(null != id){
             batalla = batallaDAO.getBatalla(id);
         }else{
-            batalla = batallaDAO.getUltimaBatalla(null);        
+            batalla = batallaDAO.getUltimaBatalla();        
         }
         
         session.flush();

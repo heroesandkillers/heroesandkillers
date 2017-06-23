@@ -536,7 +536,7 @@ public class BatallaDAO {
     }
 
     public List<Batalla> getBatallasUsuario(int division, int id) {
-        String peticion = "FROM Batalla WHERE division = " + division + " AND tipo = 'liga' AND (eqLoc_id = " + id + " OR eqVis_id = " + id + ")";
+        String peticion = "FROM Batalla WHERE division = " + division + " AND tipo = 'liga' AND (eqLoc = " + id + " OR eqVis = " + id + ")";
         List<Batalla> list = new ArrayList();
         Query query = session.createQuery(peticion);
         if (query != null) {
@@ -554,12 +554,13 @@ public class BatallaDAO {
 //            return batalla.getEqLoc();
 //        }
 //    }
-    public Batalla getUltimaBatalla(Usuario user) {
+    public Batalla getUltimaBatalla() {
         UsuarioDAO usuarioDAO = new UsuarioDAO(session);
-        if (null == user) {
-            user = usuarioDAO.getUsuario();
-        }
+        Usuario user = usuarioDAO.getUsuario();
+        return getUltimaBatalla(user);
+    }
 
+    public Batalla getUltimaBatalla(Usuario user) {
         int now = (int) (new Date().getTime() / 1000);
 
         String peticion = "FROM Batalla WHERE fecha = (SELECT max(fecha) FROM Batalla WHERE fecha < " + now + " eqLoc = " + user.getId() + " OR eqLoc = " + user.getId() + ") "
