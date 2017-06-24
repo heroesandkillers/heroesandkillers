@@ -564,7 +564,7 @@ public class BatallaDAO {
     public Batalla getUltimaBatalla(Usuario user) {
         int now = (int) (new Date().getTime() / 1000);
 
-        String peticion = "FROM Batalla WHERE fecha = (SELECT max(fecha) FROM Batalla WHERE fecha < " + now + " eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ") "
+        String peticion = "FROM Batalla WHERE fecha = (SELECT max(fecha) FROM Batalla WHERE fecha < " + now + " AND (eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ")) "
                 + "AND (eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ")";
         return (Batalla) session.createQuery(peticion).uniqueResult();
     }
