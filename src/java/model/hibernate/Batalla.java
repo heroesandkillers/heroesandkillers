@@ -12,7 +12,7 @@ public class Batalla implements Serializable {
     private Long id;
     private Integer calculos = 0;
     private Division division;
-    private Usuario eqLoc_id;
+    private Usuario eqLoc;
     public Integer eqLocId;
     public String eqLocName;
     private Usuario eqVis;
@@ -61,11 +61,11 @@ public class Batalla implements Serializable {
     @Index(name = "eqLoc")
     @ManyToOne(cascade = CascadeType.ALL)
     public Usuario getEqLoc() {
-        return eqLoc_id;
+        return eqLoc;
     }
 
-    public void setEqLoc(Usuario eqLoc_id) {
-        this.eqLoc_id = eqLoc_id;
+    public void setEqLoc(Usuario eqLoc) {
+        this.eqLoc = eqLoc;
     }
 
     @Index(name = "eqVis")
