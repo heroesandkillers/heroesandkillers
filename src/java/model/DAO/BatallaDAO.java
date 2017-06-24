@@ -536,9 +536,8 @@ public class BatallaDAO {
     }
 
     public List<Batalla> getBatallasUsuario(int division, int id) {
-//        String peticion = "FROM Batalla WHERE division = " + division + " AND tipo = 'liga' AND (eqLoc = " + id + " OR eqVis = " + id + ")";
-
-        String peticion = "FROM Batalla";
+        String peticion = "SELECT * FROM Batalla WHERE division = " + division + " AND tipo = 'liga' AND (eqLoc = " + id + " OR eqVis = " + id + ")";
+//        String peticion = "FROM Batalla";
         List<Batalla> list = new ArrayList();
         Query query = session.createQuery(peticion);
         if (query != null) {
