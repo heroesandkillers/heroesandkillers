@@ -6,7 +6,7 @@ import javax.persistence.*;
 public abstract class Criaturas {
 
     private Long id;
-    private Usuario usuario;
+    private Usuario usuario; //usuario_id in DB
     private String nombre;
     private String apodo;
     private String aspecto;

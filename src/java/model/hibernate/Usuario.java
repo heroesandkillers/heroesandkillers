@@ -19,7 +19,7 @@ public class Usuario implements Serializable {
     private String estad;
     private String puntos;
     private Integer posicion;
-    private Division division;    
+    private Division division; //division_id in DB
     private Integer activo;
     private String cons;
     private String graficos;

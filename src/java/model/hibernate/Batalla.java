@@ -12,10 +12,10 @@ public class Batalla implements Serializable {
     private Long id;
     private Integer calculos = 0;
     private Division division;
-    private Usuario eqLoc;
+    private Usuario eqLoc; //eqLoc_id in DB
     public Integer eqLocId;
     public String eqLocName;
-    private Usuario eqVis;
+    private Usuario eqVis; //eqVis_id in DB
     public Integer eqVisId;
     public String eqVisName;
     private String alinLoc;
