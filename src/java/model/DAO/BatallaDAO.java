@@ -570,7 +570,7 @@ public class BatallaDAO {
 
     public Batalla getUltimaBatallaCalculada(Usuario user) {
         String peticion = "FROM Batalla WHERE calculos > 0"
-                + "AND (eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ") ORDER BY fecha DESC LIMI 1";
+                + "AND (eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ") ORDER BY fecha DESC LIMIT 1";
         return (Batalla) session.createQuery(peticion).uniqueResult();
     }
 
