@@ -13,13 +13,12 @@ public class Phpbb_userDAO {
         this.session = session;
     }
 
-    public Phpbb_user loadPhpbb_user(long id) {
+    public Phpbb_user loadPhpbb_user(long id) throws SQLException {
         String peticion = "FROM Phpbb_user WHERE user_id = " + id;
         return (Phpbb_user) session.createQuery(peticion).uniqueResult();
-
     }
 
-    public Phpbb_user loadPhpbb_user(String user) {
+    public Phpbb_user loadPhpbb_user(String user) throws SQLException {
         String peticion = "FROM Phpbb_user WHERE username = '" + user + "'";
         return (Phpbb_user) session.createQuery(peticion).uniqueResult();
     }

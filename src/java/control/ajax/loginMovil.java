@@ -26,8 +26,14 @@ public class loginMovil extends ActionSupport {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         Phpbb_userDAO phpbb_userDAO = new Phpbb_userDAO(session);
-        Phpbb_user yo = phpbb_userDAO.loadPhpbb_user(key1);
-        
+        Phpbb_user yo = null;
+        try {
+            yo = phpbb_userDAO.loadPhpbb_user(key1);
+        } catch (Exception e) {
+            mapaJSON = e.getMessage();
+            return SUCCESS;
+        }
+
         if (null == yo) {
             mapaJSON = "incorrecto (1)";
             return SUCCESS;
