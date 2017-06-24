@@ -58,7 +58,7 @@ public class Batalla implements Serializable {
         this.division = division;
     }
 
-//    @Index(name = "eqLoc")
+    @Index(name = "eqLoc_id")
     @ManyToOne(cascade = CascadeType.ALL)
     public Usuario getEqLoc() {
         return eqLoc;
@@ -68,7 +68,7 @@ public class Batalla implements Serializable {
         this.eqLoc = eqLoc;
     }
 
-//    @Index(name = "eqVis")
+    @Index(name = "eqVis")
     @ManyToOne(cascade = CascadeType.ALL)
     public Usuario getEqVis() {
         return eqVis;
