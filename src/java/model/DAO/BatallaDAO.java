@@ -250,7 +250,6 @@ public class BatallaDAO {
     }
 
     public int rotar(int numero, int operacion) {
-
         int rotar = numero + operacion;
 
         if (rotar < 0) {
@@ -555,16 +554,22 @@ public class BatallaDAO {
 //            return batalla.getEqLoc();
 //        }
 //    }
-    public Batalla getUltimaBatalla() {
+//    public Batalla getUltimaBatalla(Usuario user) {
+//        int now = (int) (new Date().getTime() / 1000);
+//
+//        String peticion = "FROM Batalla WHERE fecha = (SELECT max(fecha) FROM Batalla WHERE fecha < " + now + " AND (eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ")) "
+//                + "AND (eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ")";
+//        return (Batalla) session.createQuery(peticion).uniqueResult();
+//    }
+
+    public Batalla getUltimaBatallaCalculada() {
         UsuarioDAO usuarioDAO = new UsuarioDAO(session);
         Usuario user = usuarioDAO.getUsuario();
-        return getUltimaBatalla(user);
+        return getUltimaBatallaCalculada(user);
     }
 
-    public Batalla getUltimaBatalla(Usuario user) {
-        int now = (int) (new Date().getTime() / 1000);
-
-        String peticion = "FROM Batalla WHERE fecha = (SELECT max(fecha) FROM Batalla WHERE fecha < " + now + " AND (eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ")) "
+    public Batalla getUltimaBatallaCalculada(Usuario user) {
+        String peticion = "FROM Batalla WHERE calculos > 0"
                 + "AND (eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ")";
         return (Batalla) session.createQuery(peticion).uniqueResult();
     }
