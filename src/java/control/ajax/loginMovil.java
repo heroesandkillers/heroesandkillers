@@ -27,14 +27,17 @@ public class loginMovil extends ActionSupport {
 
         Phpbb_userDAO phpbb_userDAO = new Phpbb_userDAO(session);
         Phpbb_user yo = phpbb_userDAO.loadPhpbb_user(key1);
+        
+        if (null == yo) {
+            mapaJSON = "incorrecto (1)";
+            return SUCCESS;
+        }
 
         String passForo;
         boolean result = false;
-        if (yo != null) {
-            passForo = yo.getUser_password();
-            result = phpbb_check_hash(key2, passForo);
-            result = true;
-        }
+        passForo = yo.getUser_password();
+        result = phpbb_check_hash(key2, passForo);
+        result = true;
 //        else {
         //ACTIVAR EN CASO DE NO HABER FORO
 //            if (loginUser.equals("prueba")) {
@@ -64,7 +67,7 @@ public class loginMovil extends ActionSupport {
             session.close();
             return SUCCESS;
         } else {
-            mapaJSON = "incorrecto";
+            mapaJSON = "incorrecto (2)";
             return SUCCESS;
         }
     }
@@ -87,6 +90,7 @@ public class loginMovil extends ActionSupport {
     /**
      * Port of phpBB3 password handling to Java. See
      * phpBB3/includes/functions.php
+     *
      * @author lars
      */
     private static final int PHP_VERSION = 5;
