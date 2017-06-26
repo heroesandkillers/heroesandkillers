@@ -1,6 +1,7 @@
 package model.DAO;
 
 import com.opensymphony.xwork2.ActionContext;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import model.hibernate.HibernateUtil;
 import model.hibernate.Phpbb_user;
 import model.hibernate.Trofeo;
 import model.hibernate.Usuario;
+import mysql.Mysql;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -229,10 +231,11 @@ public class UsuarioDAO {
 
     //if missing
     public void repararUsuarios(int division) {
-        Query q = session.createQuery("SELECT DISTINCT eqLoc_id FROM hak_batallas WHERE division = :division");
-        q.setParameter("division", division);
-        List<Integer> ids = q.list();
-
+        Mysql mysql = new Mysql();
+        
+//        ResultSet result = mysql.query("SELECT DISTINCT eqLoc_id FROM hak_batallas WHERE division = ?", new String[division]);
+        List<Integer> ids = (List<Integer>) mysql.query("SELECT DISTINCT eqLoc_id FROM hak_batallas WHERE division = ?", new String[division]);
+        
         for (int i = 0; i < ids.size(); i++) {
             int id = ids.get(i);
             Query qUsuario = session.createQuery("SELECT count(*) FROM hak_usuarios WHERE id = :id");
