@@ -229,7 +229,7 @@ public class UsuarioDAO {
 
     //if missing
     public void repararUsuarios(int division) {
-        Query q = session.createQuery("SELECT DISTINCT eqLoc_id FROM Batallas WHERE division = :division");
+        Query q = session.createQuery("SELECT DISTINCT eqLoc_id FROM Batalla WHERE division = :division");
         q.setParameter("division", division);
         List<Integer> ids = q.list();
 
