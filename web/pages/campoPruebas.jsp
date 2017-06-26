@@ -102,7 +102,7 @@
                 
                 if (newWidthToHeight > widthToHeight) {
                     newWidth = newHeight * widthToHeight;
-                    gameCanvas.height(newHeight);
+//                    gameCanvas.height(newHeight);
                     gameCanvas.width(newWidth);
             
                     return gameArea.height() / 800;
@@ -110,7 +110,7 @@
                 } else {
                     newHeight = newWidth / widthToHeight;
                     gameCanvas.width(newWidth);
-                    gameCanvas.height(newHeight);
+//                    gameCanvas.height(newHeight);
             
                     return gameArea.width() / 1200;
                 }

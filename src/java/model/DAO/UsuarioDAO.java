@@ -63,7 +63,7 @@ public class UsuarioDAO {
         Usuario usuario = (Usuario) session.createQuery(peticion).uniqueResult();
 
         if (usuario == null) {
-            if (!existeUsuario(phpbb_user.getUsername())) {
+            if (!existeUsuario(phpbb_user.getUser_id())) {
                 usuario = crearUsuario(phpbb_user);
             } else {
                 System.out.println("ERROR: Ya existe un usuario con nombre: " + phpbb_user.getUsername() + " en el juego. Imposible generar un nuevo usuario.");
@@ -154,10 +154,10 @@ public class UsuarioDAO {
         update(usuario);
     }
 
-    public boolean existeUsuario(String user) {
+    public boolean existeUsuario(int userId) {
         boolean existe = false;
-        String peticion = "FROM Usuario WHERE username='" + user + "'";
-        if (session.createQuery(peticion).uniqueResult() != null || user.equals("hak")) {
+        String peticion = "FROM Usuario WHERE id='" + userId + "'";
+        if (session.createQuery(peticion).uniqueResult() != null) {
             existe = true;
         }
         return existe;

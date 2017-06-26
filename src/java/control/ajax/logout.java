@@ -18,8 +18,13 @@ public class logout extends ActionSupport {
     public String execute() throws Exception {
         try {
             Map login = ActionContext.getContext().getSession();
-            int userId = (Integer) ActionContext.getContext().getSession().get("usuario");
-
+            Integer userId = (Integer) ActionContext.getContext().getSession().get("usuario");
+            
+            if(null == userId){
+                mapaJSON = "not loged";
+                return SUCCESS;
+            }
+            
             phpbb_logout(userId);
             login.remove("usuario");
 
