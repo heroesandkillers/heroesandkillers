@@ -229,18 +229,18 @@ public class UsuarioDAO {
 
     //if missing
     public void repararUsuarios(int division) {
-        Query q = session.createQuery("SELECT DISTINCT eqLoc_id FROM Batalla WHERE division = :division");
+        Query q = session.createQuery("SELECT DISTINCT eqLoc_id FROM hak_batallas WHERE division = :division");
         q.setParameter("division", division);
         List<Integer> ids = q.list();
 
         for (int i = 0; i < ids.size(); i++) {
             int id = ids.get(i);
-            Query qUsuario = session.createQuery("SELECT count(*) FROM Usuario WHERE id = :id");
+            Query qUsuario = session.createQuery("SELECT count(*) FROM hak_usuarios WHERE id = :id");
             qUsuario.setParameter("id", id);
             int count = ((Long) qUsuario.uniqueResult()).intValue();
 
             if (0 == count) {
-                Query query = session.createSQLQuery("INSERT INTO Usuario (id, division) VALUES (:id, :division)");
+                Query query = session.createSQLQuery("INSERT INTO hak_usuarios (id, division) VALUES (:id, :division)");
                 query.setParameter("id", id);
                 query.setParameter("division", division);
                 query.executeUpdate();
