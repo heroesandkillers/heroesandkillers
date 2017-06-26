@@ -10,6 +10,7 @@ import model.hibernate.Trofeo;
 import model.hibernate.Usuario;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -211,7 +212,6 @@ public class UsuarioDAO {
     }
 
     public List<Usuario> getUsuariosActivos() {
-
         String peticion = "FROM Usuario WHERE activo = 1";
         List<Usuario> usuarios = session.createQuery(peticion).list();
 
@@ -224,6 +224,15 @@ public class UsuarioDAO {
         Usuario usuario = (Usuario) session.load(Usuario.class, id);
         session.delete(usuario);
         t.commit();
+    }
+    
+    //if missing
+    public void rellenarUsuarios(int division) {
+        String peticion = "select count(*) FROM Usuario WHERE division = " + division;
+        int count = ((Long) session.createQuery(peticion).uniqueResult()).intValue();
+        for (int i = 0; i < 10 - count; i++) {
+            rellenarUsuarios(division, 0, 1);
+        }
     }
 
     public void rellenarUsuarios(int division, int posicion, int numero) {

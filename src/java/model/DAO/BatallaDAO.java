@@ -449,17 +449,16 @@ public class BatallaDAO {
 //
 //        return batallasId;
 //    }
-    public List[] getBatallasUsuarioNotNull(int id) {
-        String peticion1 = "SELECT res FROM Batalla WHERE eqLocId = " + id + " AND res != null";
-        List<String> resultados1 = session.createQuery(peticion1).list();
-
-        String peticion2 = "SELECT res FROM Batalla WHERE eqVisId = " + id + " AND res != null";
-        List<String> resultados2 = session.createQuery(peticion2).list();
-
-        List[] array = {resultados1, resultados2};
-        return array;
-    }
-
+//    public List[] getBatallasUsuarioNotNull(int id) {
+//        String peticion1 = "SELECT res FROM Batalla WHERE eqLocId = " + id + " AND res != null";
+//        List<String> resultados1 = session.createQuery(peticion1).list();
+//
+//        String peticion2 = "SELECT res FROM Batalla WHERE eqVisId = " + id + " AND res != null";
+//        List<String> resultados2 = session.createQuery(peticion2).list();
+//
+//        List[] array = {resultados1, resultados2};
+//        return array;
+//    }
     public List<Batalla> getBatallasCalculo(int division) {
         int today = (int) (new Date().getTime() / 1000);
 
@@ -536,11 +535,15 @@ public class BatallaDAO {
 
     public List<Batalla> getBatallasUsuario(int division, int id) {
         String peticion = "FROM Batalla WHERE division = " + division + " AND tipo = 'liga' AND (eqLoc = " + id + " OR eqVis = " + id + ")";
-//        String peticion = "FROM Batalla";
         List<Batalla> list = new ArrayList();
         Query query = session.createQuery(peticion);
         if (query != null) {
-            list = query.list();
+            try {
+                list = query.list();
+            } catch (Exception e) {
+                UsuarioDAO usuarioDAO = new UsuarioDAO(session);
+                usuarioDAO.rellenarUsuarios(division);
+            }
         }
         return list;
     }
@@ -561,7 +564,6 @@ public class BatallaDAO {
 //                + " AND (eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ") ORDER BY fecha DESC LIMIT 1";
 //        return (Batalla) session.createQuery(peticion).uniqueResult();
 //    }
-
     public Batalla getUltimaBatallaCalculada() {
         UsuarioDAO usuarioDAO = new UsuarioDAO(session);
         Usuario user = usuarioDAO.getUsuario();
