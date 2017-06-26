@@ -8,6 +8,7 @@ import model.hibernate.HibernateUtil;
 import model.hibernate.Phpbb_user;
 import model.hibernate.Trofeo;
 import model.hibernate.Usuario;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
@@ -225,13 +226,25 @@ public class UsuarioDAO {
         session.delete(usuario);
         t.commit();
     }
-    
+
     //if missing
-    public void rellenarUsuarios(int division) {
-        String peticion = "select count(*) FROM Usuario WHERE division = " + division;
-        int count = ((Long) session.createQuery(peticion).uniqueResult()).intValue();
-        for (int i = 0; i < 10 - count; i++) {
-            rellenarUsuarios(division, 0, 1);
+    public void repararUsuarios(int division) {
+        Query q = session.createQuery("SELECT DISTINCT eqLoc_id FROM Batallas WHERE division = :division");
+        q.setParameter("division", division);
+        List<Integer> ids = q.list();
+
+        for (int i = 0; i < ids.size(); i++) {
+            int id = ids.get(i);
+            Query qUsuario = session.createQuery("SELECT count(*) FROM Usuario WHERE id = :id");
+            qUsuario.setParameter("id", id);
+            int count = ((Long) qUsuario.uniqueResult()).intValue();
+
+            if (0 == count) {
+                Query query = session.createSQLQuery("INSERT INTO Usuario (id, division) VALUES (:id, :division)");
+                query.setParameter("id", id);
+                query.setParameter("division", division);
+                query.executeUpdate();
+            }
         }
     }
 

@@ -542,7 +542,7 @@ public class BatallaDAO {
                 list = query.list();
             } catch (Exception e) {
                 UsuarioDAO usuarioDAO = new UsuarioDAO(session);
-                usuarioDAO.rellenarUsuarios(division);
+                usuarioDAO.repararUsuarios(division);
             }
         }
         return list;
