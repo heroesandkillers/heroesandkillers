@@ -32,8 +32,8 @@ public class Mysql {
                 list.add(rs.getInt(1));
                 throw new Error("rs.getInt(1): " + rs.getInt(1));
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
         return list;
