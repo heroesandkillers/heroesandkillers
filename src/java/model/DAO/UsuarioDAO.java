@@ -236,7 +236,7 @@ public class UsuarioDAO {
     public void repararUsuarios(int division) {
         Mysql mysql = new Mysql();
         String[] params = {"" + division};
-        List<Integer> ids = mysql.integers("SELECT DISTINCT eqLoc_id FROM hak_batallas WHERE division = ?", params);
+        List<Integer> ids = mysql.integers("SELECT DISTINCT eqLoc_id FROM hak_batallas WHERE division_division = ?", params);
 
         for (int i = 0; i < ids.size(); i++) {
             int id = ids.get(i);
@@ -247,12 +247,12 @@ public class UsuarioDAO {
             int count = (int) mysql.integers("SELECT count(*) FROM hak_usuarios WHERE id = ?", idParams).get(0);
 
             if (0 == count) {
-                Query query = session.createSQLQuery("INSERT INTO hak_usuarios (id, division) VALUES (:id, :division)");
-                query.setParameter("id", id);
-                query.setParameter("division", division);
-                query.executeUpdate();
-                String[] insertParams = {"" + id, "" + division};
-                mysql.query("INSERT INTO hak_usuarios (id, division) VALUES (?, ?)", insertParams);
+//                Query query = session.createSQLQuery("INSERT INTO hak_usuarios (id, division) VALUES (:id, :division)");
+//                query.setParameter("id", id);
+//                query.setParameter("division", division);
+//                query.executeUpdate();
+                String[] insertParams = {"" + id};
+                mysql.query("INSERT INTO hak_usuarios (id) VALUES (?)", insertParams);
             }
         }
 
