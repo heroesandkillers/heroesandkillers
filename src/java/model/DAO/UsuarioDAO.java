@@ -235,23 +235,17 @@ public class UsuarioDAO {
     //if missing
     public void repararUsuarios(int division) {
         Mysql mysql = new Mysql();
-        String[] params = {"" + division};
+        
+        int[] params = {division};
         List<Integer> ids = mysql.integers("SELECT DISTINCT eqLoc_id FROM hak_batallas WHERE division_division = ?", params);
 
         for (int i = 0; i < ids.size(); i++) {
             int id = ids.get(i);
-//            Query qUsuario = session.createQuery("SELECT count(*) FROM hak_usuarios WHERE id = :id");
-//            qUsuario.setParameter("id", id);
-//            int count = ((Long) qUsuario.uniqueResult()).intValue();
-            String[] idParams = {"" + id};
+            int[] idParams = {id};
             int count = (int) mysql.integers("SELECT count(*) FROM hak_usuarios WHERE id = ?", idParams).get(0);
 
             if (0 == count) {
-//                Query query = session.createSQLQuery("INSERT INTO hak_usuarios (id, division) VALUES (:id, :division)");
-//                query.setParameter("id", id);
-//                query.setParameter("division", division);
-//                query.executeUpdate();
-                String[] insertParams = {"" + id};
+                int[] insertParams = {id};
                 mysql.query("INSERT INTO hak_usuarios (id) VALUES (?)", insertParams);
             }
         }

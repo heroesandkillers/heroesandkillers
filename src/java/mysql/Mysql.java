@@ -23,7 +23,7 @@ public class Mysql {
         }
     }
 
-    public List integers(String query, String[] params) {
+    public List integers(String query, int[] params) {
         ResultSet rs = query(query, params);
 
         List<Integer> list = new ArrayList();
@@ -38,12 +38,12 @@ public class Mysql {
         return list;
     }
 
-    public ResultSet query(String query, String[] params) {
+    public ResultSet query(String query, int[] params) {
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
 
             for (int i = 0; i < params.length; i++) {
-                stmt.setString(i + 1, params[i]);
+                stmt.setInt(i + 1, params[i]);
             }
             ResultSet rs = stmt.executeQuery();
 
