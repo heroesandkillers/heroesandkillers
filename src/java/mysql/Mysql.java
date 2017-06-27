@@ -30,7 +30,6 @@ public class Mysql {
         try {
             while (rs.next()) {
                 list.add(rs.getInt(1));
-                throw new Error("rs.getInt(1): " + rs.getInt(1));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
