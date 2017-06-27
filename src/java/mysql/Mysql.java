@@ -15,7 +15,8 @@ public class Mysql {
     public Mysql() {
         try {
             Context context = new InitialContext();
-            DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/myDB");
+//            DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/hak");
+            DataSource dataSource = (DataSource) context.lookup("jdbc/hak");
             conn = dataSource.getConnection();
         } catch (Exception e) {
             //
