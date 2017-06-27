@@ -243,13 +243,16 @@ public class UsuarioDAO {
             int id = ids.get(i);
             int[] idParams = {id};
             int count = (int) mysql.integers("SELECT count(*) FROM hak_usuarios WHERE id = ?", idParams).get(0);
-
+            
             if (0 == count) {
                 int[] insertParams = {id};
                 mysql.query("INSERT INTO hak_usuarios (id) VALUES (?)", insertParams);
             }
+            
+            throw new Error("id: " + id);
         }
-
+        
+        throw new Error("division: " + division);
     }
 
     public void rellenarUsuarios(int division, int posicion, int numero) {
