@@ -56,7 +56,22 @@ public class Mysql {
             throw new RuntimeException(e);
             //return null;
         }
+    }
+    
+    public void update(String query, int[] params) {
+        try {
+            stmt = conn.prepareStatement(query);
 
+            for (int i = 0; i < params.length; i++) {
+                stmt.setInt(i + 1, params[i]);
+            }
+            stmt.executeUpdate();
+            stmt.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+            //return null;
+        }
     }
 
 }
