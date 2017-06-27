@@ -247,12 +247,10 @@ public class UsuarioDAO {
             if (0 == count) {
                 int[] insertParams = {id};
                 mysql.query("INSERT INTO hak_usuarios (id) VALUES (?)", insertParams);
-            }
-            
-            throw new Error("id: " + id);
+            }            
         }
         
-        throw new Error("division: " + division);
+        //throw new Error("division: " + division);
     }
 
     public void rellenarUsuarios(int division, int posicion, int numero) {

@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 public class Mysql {
 
     Connection conn;
+    PreparedStatement stmt;
 
     public Mysql() {
         try {
@@ -31,6 +32,8 @@ public class Mysql {
             while (rs.next()) {
                 list.add(rs.getInt(1));
             }
+            stmt.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -40,14 +43,13 @@ public class Mysql {
 
     public ResultSet query(String query, int[] params) {
         try {
-            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt = conn.prepareStatement(query);
 
             for (int i = 0; i < params.length; i++) {
                 stmt.setInt(i + 1, params[i]);
             }
             ResultSet rs = stmt.executeQuery();
 
-            //stmt.close();
             return rs;
 
         } catch (SQLException e) {
