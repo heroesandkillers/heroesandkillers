@@ -1,6 +1,8 @@
 package mysql;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.*;
@@ -20,6 +22,21 @@ public class Mysql {
         }
     }
 
+    public List integers(String query, String[] params) {
+        ResultSet rs = query(query, params);
+        
+        List<Integer> list = new ArrayList();
+        try {
+            while (rs.next()) {
+                list.add(rs.getInt(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return list;
+    }
+
     public ResultSet query(String query, String[] params) {
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -27,10 +44,10 @@ public class Mysql {
             for (int i = 0; i < params.length; i++) {
                 stmt.setString(i, params[i]);
             }
-            ResultSet data = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             stmt.close();
-            return data;
+            return rs;
 
         } catch (SQLException ex) {
             return null;
