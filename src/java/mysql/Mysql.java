@@ -25,7 +25,7 @@ public class Mysql {
 
     public List integers(String query, String[] params) {
         ResultSet rs = query(query, params);
-        
+
         List<Integer> list = new ArrayList();
         try {
             while (rs.next()) {
@@ -34,7 +34,7 @@ public class Mysql {
         } catch (SQLException ex) {
             Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return list;
     }
 
@@ -43,7 +43,7 @@ public class Mysql {
             PreparedStatement stmt = conn.prepareStatement(query);
 
             for (int i = 0; i < params.length; i++) {
-                stmt.setString(i, params[i]);
+                stmt.setString(i + 1, params[i]);
             }
             ResultSet rs = stmt.executeQuery();
 
