@@ -28,7 +28,7 @@ public class Mysql {
 
         List<Integer> list = new ArrayList();
         try {
-            while (rs.next()) {                
+            while (rs.next()) {
                 list.add(rs.getInt(1));
                 throw new Error("rs.getInt(1): " + rs.getInt(1));
             }
@@ -48,7 +48,7 @@ public class Mysql {
             }
             ResultSet rs = stmt.executeQuery();
 
-            stmt.close();
+            //stmt.close();
             return rs;
 
         } catch (SQLException e) {
