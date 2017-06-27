@@ -19,7 +19,7 @@ public class Mysql {
             DataSource dataSource = (DataSource) context.lookup("jdbc/hak");
             conn = dataSource.getConnection();
         } catch (Exception e) {
-            //
+            throw new RuntimeException(e);
         }
     }
 
@@ -50,8 +50,9 @@ public class Mysql {
             stmt.close();
             return rs;
 
-        } catch (SQLException ex) {
-            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+            //return null;
         }
 
     }
