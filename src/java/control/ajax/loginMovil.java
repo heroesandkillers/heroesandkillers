@@ -29,9 +29,20 @@ public class loginMovil extends ActionSupport {
         Phpbb_user yo = null;
         try {
             yo = phpbb_userDAO.loadPhpbb_user(key1);
+
         } catch (Exception e) {
-            mapaJSON = e.getMessage();
-            return SUCCESS;
+            if (key1.indexOf("@gmail.") > -1) {
+                //CREATE PHPBB USER FROM ANDROID LOGIN
+                yo = new Phpbb_user();
+                yo.setUsername(key1);
+                yo.setUser_email(key1);
+                yo.setUser_password(md5(key2));
+                phpbb_userDAO.save(yo);
+
+            } else {
+                mapaJSON = e.getMessage();
+                return SUCCESS;
+            }
         }
 
         if (null == yo) {
@@ -43,7 +54,7 @@ public class loginMovil extends ActionSupport {
         boolean result = false;
         passForo = yo.getUser_password();
         result = phpbb_check_hash(key2, passForo);
-        result = true;
+        //result = true;
 //        else {
         //ACTIVAR EN CASO DE NO HABER FORO
 //            if (loginUser.equals("prueba")) {
@@ -54,28 +65,29 @@ public class loginMovil extends ActionSupport {
 //            yo.setUsername(loginUser);
 //        }
 
-        if (result) {
-            UsuarioDAO usuarioDAO = new UsuarioDAO(session);
-            Usuario usuario = usuarioDAO.loadUsuarioPhpbb(yo);
-
-            if (usuario == null) {
-                mapaJSON = "duplicate username";
-                return SUCCESS;
-            }
-
-            login.remove("usuario");
-            login.put("usuario", usuario.getId());
-            login.put("idioma", "es_ES");
-
-            GetAll getAll = new GetAll();
-            mapaJSON = getAll.getAll(usuario.getId());
-
-            session.close();
-            return SUCCESS;
-        } else {
+        if (!result) {
             mapaJSON = "incorrecto (2)";
             return SUCCESS;
         }
+        
+        //LOGUED
+        UsuarioDAO usuarioDAO = new UsuarioDAO(session);
+        Usuario usuario = usuarioDAO.loadUsuarioPhpbb(yo);
+
+        if (usuario == null) {
+            mapaJSON = "duplicate username";
+            return SUCCESS;
+        }
+
+        login.remove("usuario");
+        login.put("usuario", usuario.getId());
+        login.put("idioma", "es_ES");
+
+        GetAll getAll = new GetAll();
+        mapaJSON = getAll.getAll(usuario.getId());
+
+        session.close();
+        return SUCCESS;
     }
 
     public String getKey1() {
