@@ -19,7 +19,7 @@ public class loginMovil extends ActionSupport {
 
     private String key1;
     private String key2;
-    public String mapaJSON = "error";
+    public String mapaJSON = "error: ";
 
     public String execute() throws Exception {
         Map login = ActionContext.getContext().getSession();
@@ -29,8 +29,13 @@ public class loginMovil extends ActionSupport {
         Phpbb_user yo = null;
         try {
             yo = phpbb_userDAO.loadPhpbb_user(key1);
-
         } catch (Exception e) {
+            mapaJSON += e.getMessage();
+            return SUCCESS;
+        }
+
+        if (null == yo) {
+            mapaJSON += " El usuario no existe. ";
             if (key1.indexOf("@gmail.") > -1) {
                 //CREATE PHPBB USER FROM ANDROID LOGIN
                 yo = new Phpbb_user();
@@ -40,14 +45,9 @@ public class loginMovil extends ActionSupport {
                 phpbb_userDAO.save(yo);
 
             } else {
-                mapaJSON = e.getMessage();
+                mapaJSON += " incorrecto (1)";
                 return SUCCESS;
             }
-        }
-
-        if (null == yo) {
-            mapaJSON = "incorrecto (1)";
-            return SUCCESS;
         }
 
         String passForo;
@@ -69,7 +69,7 @@ public class loginMovil extends ActionSupport {
             mapaJSON = "incorrecto (2)";
             return SUCCESS;
         }
-        
+
         //LOGUED
         UsuarioDAO usuarioDAO = new UsuarioDAO(session);
         Usuario usuario = usuarioDAO.loadUsuarioPhpbb(yo);
