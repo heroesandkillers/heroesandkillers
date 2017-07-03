@@ -235,7 +235,7 @@ public class UsuarioDAO {
     //if missing
     public void repararUsuarios(int division) {
         Mysql mysql = new Mysql();
-        
+
         int[] params = {division};
         List<Integer> ids = mysql.integers("SELECT DISTINCT eqLoc_id FROM hak_batallas WHERE division_division = ?", params);
 
@@ -243,16 +243,13 @@ public class UsuarioDAO {
             int id = ids.get(i);
             int[] idParams = {id};
             int count = (int) mysql.integers("SELECT count(*) FROM hak_usuarios WHERE id = ?", idParams).get(0);
-            
+
             if (0 == count) {
                 int[] insertParams = {id};
                 mysql.update("INSERT INTO hak_usuarios (id) VALUES (?)", insertParams);
-                
-//                throw new Error("id: " + id);
             }
         }
-        
-//        throw new Error("division: " + division);
+
     }
 
     public void rellenarUsuarios(int division, int posicion, int numero) {

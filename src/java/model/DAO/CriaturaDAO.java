@@ -84,6 +84,9 @@ public class CriaturaDAO {
 
     public List<CriaturaMazmorra> getMazmorrasRango(String peticionAtributos) {
         System.out.println("peticionAtributos = " + peticionAtributos);
+        
+        //if not creatures
+        llenarMazmorras();
 
         //if empty query -> nothing
         if ("".equals(peticionAtributos)) {
@@ -288,11 +291,14 @@ public class CriaturaDAO {
         calendar.add(Calendar.MONTH, -edadInicial);
         calendar.add(Calendar.DAY_OF_WEEK, -(int) (Math.random() * max * 30));
 
-        criatura.setNombre(nombre());
         criatura.setAspecto((int) (Math.random() * 3) + ";" + (int) (Math.random() * 3) + ";" + (int) (Math.random() * 3) + ";" + (int) (Math.random() * 3) + ";" + (int) (Math.random() * 3) + ";" + (int) (Math.random() * 3) + ";" + (int) (Math.random() * 3));
 
         criatura.setSexo(1);
-        criatura.setRaza(raza[(int) (Math.random() * raza.length)]);
+
+        int razaInt = (int) (Math.random() * raza.length);
+        criatura.setRaza(raza[razaInt]);
+        criatura.setNombre(nombre(razaInt));
+
         criatura.setMutacion(mutacion[(int) (Math.random() * mutacion.length)]);
         criatura.setElemento(elemento[(int) (Math.random() * elemento.length)]);
 
@@ -333,16 +339,35 @@ public class CriaturaDAO {
         return criatura;
     }
 
-    public String nombre() {
+    public String nombre(int num) {
+        //http://www.wizards.com
+        String[] nombres;
+        String[] apellidos;
 
-//        String[] nombres = new String[]{"Aquiles", "Hector", "Hércules", "Heracles", "Jasón", "Teseo", "Filemón", "Orfeo", "Ulises", "Agamenón", "Milciades", "Temístocles", "Leónidas", "Pausanias", "Minos"};
-//        String[] apellidos = new String[]{"Aquiles", "Hector", "Hércules", "Heracles", "Jasón", "Teseo", "Filemón", "Orfeo", "Ulises", "Agamenón", "Milciades", "Temístocles", "Leónidas", "Pausanias", "Minos"};
-//        String nombre = nombres[(int) (nombres.length * Math.random())];
-//        String apellido = apellidos[(int) (nombres.length * Math.random())];
-        int nombre = (int) (100 * Math.random());
-        int apellido = (int) (100 * Math.random());
+        switch (num) {
+            case 0: //humano
+                nombres = new String[]{"Aquiles", "Hector", "Hércules", "Heracles", "Jasón", "Teseo", "Filemón", "Orfeo", "Ulises", "Agamenón", "Milciades", "Temístocles", "Leónidas", "Pausanias", "Minos"};
+                apellidos = new String[]{"Tigersoul", "Shieldheart", "Droverson", "Shieldheart", "Arroway", "Pegason", "Wyvernjack", "Swordhand", "Chorster", "Urthadar"};
 
-        return nombre + "_" + apellido;
+                break;
+            case 1: //goblin
+                nombres = new String[]{"Ricendithas", "Zanhorn", "Ricfire", "Jamroar", "Yenkas", "Wallannan", "Xavtumal", "Jamdak", "Vicril", "Norroar", "Shalannan", "Norlamin", "Petaver", "Thoice", "Frulamin"};
+                apellidos = new String[]{"Laughshield", "Goblinsfoe", "Gladdenstone", "Homeforger", "Lightouch", "Beestinger", "Goldweaver", "Shortankard", "Alerteyes", "Mongothsbeard", "Trickfoot", "Cupshigh"};
+
+                break;
+            case 2: //muerto
+            default:
+                nombres = new String[]{"Keveak", "Petgretor", "Frunan", "Otirry", "Seaward", "Elneiros", "Seanan", "Zanice", "Xavkul", "Cruamros", "Norril", "Walnan", "Marroar", "Thokul", "Minos", "Adoril"};
+                apellidos = new String[]{"Wolfswift", "Falconsflight", "Spelloyal", "Dragonsbane", "Loyalar", "Waveharp", "Droverson", "Milner", "Spelloyal"};
+
+        }
+
+        String nombre = nombres[(int) (nombres.length * Math.random())];
+        String apellido = apellidos[(int) (nombres.length * Math.random())];
+//        int nombre = (int) (100 * Math.random());
+//        int apellido = (int) (100 * Math.random());
+
+        return nombre + " " + apellido;
     }
 
     public List<Criaturas> guardarEquipo(String tipo, Usuario usuario) {
@@ -662,13 +687,12 @@ public class CriaturaDAO {
     }
 
     public void entrenar(int editorId) {
-
         TiempoDAO tiempoDAO = new TiempoDAO(session);
         Tiempo tiempo = tiempoDAO.loadTiempo("entreno");
 
         if (tiempo.getEditorId() == editorId) {
             entreno();
-            llenarMazmorras();
+            //llenarMazmorras();
         }
     }
 
@@ -992,27 +1016,36 @@ public class CriaturaDAO {
 
     public void llenarMazmorras() {
 
-        String peticion = "SELECT count(*) FROM Usuario WHERE activo = 1";
-        int num = ((Number) session.createQuery(peticion).uniqueResult()).intValue();
+//        String qUsuarios = "SELECT count(*) FROM Usuario WHERE activo = 1";
+//        int numUsuarios = ((Number) session.createQuery(qUsuarios).uniqueResult()).intValue();
+//        if (numUsuarios < 100) {
+//        numUsuarios = 100;
+//        }
+        //ALLWAYS MIN 100 CREATURES SELLING
+        String qCriaturas = "SELECT count(*) FROM CriaturaMazmorra WHERE tiempoVenta > " + new Date().getTime() / 1000;
+        int numCriaturas = ((Number) session.createQuery(qCriaturas).uniqueResult()).intValue();
 
-        if (num < 100) {
-            num = 100;
+        if (numCriaturas > 90) {
+            return;
         }
 
-        int intervalo = 604800 / num;
+        int create = 100 - numCriaturas;
+
+        int intervalo = 604800 / create;
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.SECOND, intervalo);
 
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < create; i++) {
             crearCriatura((int) (calendar.getTimeInMillis() / 1000));
         }
 
-        //Eliminar criaturas q no han sido compradas
-//        String peticionEliminar = "FROM CriaturaMazmorra WHERE usuario IS NULL AND tiempoVenta AFTER " + new Date();
+        //LIMPIEZA:
+        //
+        //SELECCIONAR CRIATURAS QUE NO HAN SIDO COMPRADAS
         String peticionEliminar = "FROM CriaturaMazmorra WHERE usuario IS NULL AND tiempoVenta < " + new Date().getTime() / 1000;
-
         List<CriaturaMazmorra> criaturas = session.createQuery(peticionEliminar).list();
 
+        //REDUCIR PRECIO CRIATURAS PARA SIGUIENTE VUELTA
         for (CriaturaMazmorra criatura : criaturas) {
 
             String[] pujas = criatura.getPujas().split(";");
@@ -1029,6 +1062,7 @@ public class CriaturaDAO {
                     criaturaPrecio.setPrecio(precio);
                     update(criaturaPrecio);
 
+                    //LIMPIAR SESION CADA 50 CRIATURAS CAMBIADAS
                     if (i % 50 == 0) {
                         session.flush();
                         session.clear();
