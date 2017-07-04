@@ -24,7 +24,7 @@ public class Phpbb_user implements Serializable {
     private String user_birthday = "";
     private String user_lastpage = "";
     private String user_last_confirm_key = "";
-    private String user_timezone = "";
+    private int user_timezone = 0;
     private String user_colour = "";
     private String user_avatar = "";
     private int user_avatar_type = 0;
@@ -113,7 +113,7 @@ public class Phpbb_user implements Serializable {
         return user_last_confirm_key;
     }
 
-    public String getUser_timezone() {
+    public int getUser_timezone() {
         return user_timezone;
     }
 
@@ -216,7 +216,7 @@ public class Phpbb_user implements Serializable {
         this.user_last_confirm_key = user_last_confirm_key;
     }
 
-    public void setUser_timezone(String user_timezone) {
+    public void setUser_timezone(int user_timezone) {
         this.user_timezone = user_timezone;
     }
 
