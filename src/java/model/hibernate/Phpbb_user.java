@@ -27,7 +27,7 @@ public class Phpbb_user implements Serializable {
     private String user_timezone = "";
     private String user_colour = "";
     private String user_avatar = "";
-    private String user_avatar_type = "";
+    private int user_avatar_type = 0;
     private String user_sig = "";
     private String user_sig_bbcode_uid = "";
     private String user_sig_bbcode_bitfield = "";
@@ -125,7 +125,7 @@ public class Phpbb_user implements Serializable {
         return user_avatar;
     }
 
-    public String getUser_avatar_type() {
+    public int getUser_avatar_type() {
         return user_avatar_type;
     }
 
@@ -228,7 +228,7 @@ public class Phpbb_user implements Serializable {
         this.user_avatar = user_avatar;
     }
 
-    public void setUser_avatar_type(String user_avatar_type) {
+    public void setUser_avatar_type(int user_avatar_type) {
         this.user_avatar_type = user_avatar_type;
     }
 
