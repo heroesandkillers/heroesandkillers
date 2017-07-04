@@ -19,7 +19,8 @@
 
 //                if (width >= 760) {
                 url = result + "/hak_static/pages/loadIndex.html";
-                $("body").load(url);
+                //$("body").load(url);
+                location.href = url;
 //                } else {
 //                window.isMobile = true;
 //                var org = "/hakMovil/assets";

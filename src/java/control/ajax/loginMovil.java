@@ -23,7 +23,7 @@ public class loginMovil extends ActionSupport {
 
     public String execute() throws Exception {
         mapaJSON += " execute() key1";
-        
+
         Map login = ActionContext.getContext().getSession();
         Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -36,16 +36,18 @@ public class loginMovil extends ActionSupport {
             return SUCCESS;
         }
 
+        PhpBB phpbb = new PhpBB();
+
         if (null == yo) {
             mapaJSON += " El usuario no existe. ";
             if (key1.indexOf("@gmail.") > -1) {
-                
+
                 //CREATE PHPBB USER FROM ANDROID LOGIN
                 yo = new Phpbb_user();
                 String username = key1.split("@")[0];
                 yo.setUsername(username);
                 yo.setUser_email(key1);
-                yo.setUser_password(md5(key2));
+                yo.setUser_password(phpbb.phpbb_hash(key2));
                 phpbb_userDAO.save(yo);
 
             } else {
@@ -57,7 +59,7 @@ public class loginMovil extends ActionSupport {
         String passForo;
         boolean result = false;
         passForo = yo.getUser_password();
-        result = phpbb_check_hash(key2, passForo);
+        result = phpbb.phpbb_hash(key2) == passForo;
 
         //ACTIVAR EN CASO DE NO HABER FORO
 //            if (loginUser.equals("prueba")) {
@@ -66,7 +68,6 @@ public class loginMovil extends ActionSupport {
 //            yo = new Phpbb_user();
 //            yo.setUser_id(1);
 //            yo.setUsername(loginUser);
-
         if (!result) {
             mapaJSON = "incorrecto (2)";
             return SUCCESS;
@@ -114,150 +115,139 @@ public class loginMovil extends ActionSupport {
      * @author lars
      */
     private static final int PHP_VERSION = 5;
-    private String itoa64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-    public String phpbb_hash(String password) {
-        String random_state = unique_id();
-        String random = "";
-        int count = 6;
-
-        if (random.length() < count) {
-            random = "";
-
-            for (int i = 0; i < count; i += 16) {
-                random_state = md5(unique_id() + random_state);
-                random += pack(md5(random_state));
-            }
-            random = random.substring(0, count);
-        }
-
-        String hash = _hash_crypt_private(password, _hash_gensalt_private(random, itoa64));
-        if (hash.length() == 34) {
-            return hash;
-        }
-
-        return md5(password);
-    }
-
-    private String unique_id() {
-        return unique_id("c");
-    }
-
-    // global $config;
-    // private boolean dss_seeded = false;
-    private String unique_id(String extra) {
-        // TODO Generate something random here.
-        return "1234567890abcdef";
-    }
-
-    private String _hash_gensalt_private(String input, String itoa64) {
-        return _hash_gensalt_private(input, itoa64, 6);
-    }
-
-    private String _hash_gensalt_private(String input, String itoa64, int iteration_count_log2) {
-        if (iteration_count_log2 < 4 || iteration_count_log2 > 31) {
-            iteration_count_log2 = 8;
-        }
-
-        String output = "$H$";
-        output += itoa64.charAt(Math.min(iteration_count_log2 + ((PHP_VERSION >= 5) ? 5 : 3), 30));
-        output += _hash_encode64(input, 6);
-
-        return output;
-    }
-
-    /**
-     * Encode hash
-     */
-    private String _hash_encode64(String input, int count) {
-        String output = "";
-        int i = 0;
-
-        do {
-            int value = input.charAt(i++);
-            output += itoa64.charAt(value & 0x3f);
-
-            if (i < count) {
-                value |= input.charAt(i) << 8;
-            }
-
-            output += itoa64.charAt((value >> 6) & 0x3f);
-
-            if (i++ >= count) {
-                break;
-            }
-
-            if (i < count) {
-                value |= input.charAt(i) << 16;
-            }
-
-            output += itoa64.charAt((value >> 12) & 0x3f);
-
-            if (i++ >= count) {
-                break;
-            }
-
-            output += itoa64.charAt((value >> 18) & 0x3f);
-        } while (i < count);
-
-        return output;
-    }
-
-    String _hash_crypt_private(String password, String setting) {
-        String output = "*";
-
-        // Check for correct hash
-        if (!setting.substring(0, 3).equals("$H$")) {
-            return output;
-        }
-
-        int count_log2 = itoa64.indexOf(setting.charAt(3));
-        if (count_log2 < 7 || count_log2 > 30) {
-            return output;
-        }
-
-        int count = 1 << count_log2;
-        String salt = setting.substring(4, 12);
-        if (salt.length() != 8) {
-            return output;
-        }
-
-        String m1 = md5(salt + password);
-        String hash = pack(m1);
-        do {
-            hash = pack(md5(hash + password));
-        } while (--count > 0);
-//        String hash = md5(salt + password);
+//    private String itoa64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+//    public String phpbb_hash(String password) {
+//        String random_state = unique_id();
+//        String random = "";
+//        int count = 6;
+//
+//        if (random.length() < count) {
+//            random = "";
+//
+//            for (int i = 0; i < count; i += 16) {
+//                random_state = md5(unique_id() + random_state);
+//                random += pack(md5(random_state));
+//            }
+//            random = random.substring(0, count);
+//        }
+//
+//        String hash = _hash_crypt_private(password, _hash_gensalt_private(random, itoa64));
+//        if (hash.length() == 34) {
+//            return hash;
+//        }
+//
+//        return md5(password);
+//    }
+//    private String unique_id() {
+//        return unique_id("c");
+//    }
+//    private String unique_id(String extra) {
+//        // TODO Generate something random here.
+//        return "1234567890abcdef";
+//    }
+//    private String _hash_gensalt_private(String input, String itoa64) {
+//        return _hash_gensalt_private(input, itoa64, 6);
+//    }
+//    private String _hash_gensalt_private(String input, String itoa64, int iteration_count_log2) {
+//        if (iteration_count_log2 < 4 || iteration_count_log2 > 31) {
+//            iteration_count_log2 = 8;
+//        }
+//
+//        String output = "$H$";
+//        output += itoa64.charAt(Math.min(iteration_count_log2 + ((PHP_VERSION >= 5) ? 5 : 3), 30));
+//        output += _hash_encode64(input, 6);
+//
+//        return output;
+//    }
+//    /**
+//     * Encode hash
+//     */
+//    private String _hash_encode64(String input, int count) {
+//        String output = "";
+//        int i = 0;
+//
 //        do {
-//            hash = md5(hash + password);
+//            int value = input.charAt(i++);
+//            output += itoa64.charAt(value & 0x3f);
+//
+//            if (i < count) {
+//                value |= input.charAt(i) << 8;
+//            }
+//
+//            output += itoa64.charAt((value >> 6) & 0x3f);
+//
+//            if (i++ >= count) {
+//                break;
+//            }
+//
+//            if (i < count) {
+//                value |= input.charAt(i) << 16;
+//            }
+//
+//            output += itoa64.charAt((value >> 12) & 0x3f);
+//
+//            if (i++ >= count) {
+//                break;
+//            }
+//
+//            output += itoa64.charAt((value >> 18) & 0x3f);
+//        } while (i < count);
+//
+//        return output;
+//    }
+//    String _hash_crypt_private(String password, String setting) {
+//        String output = "*";
+//
+//        // Check for correct hash
+//        if (!setting.substring(0, 3).equals("$H$")) {
+//            return output;
+//        }
+//
+//        int count_log2 = itoa64.indexOf(setting.charAt(3));
+//        if (count_log2 < 7 || count_log2 > 30) {
+//            return output;
+//        }
+//
+//        int count = 1 << count_log2;
+//        String salt = setting.substring(4, 12);
+//        if (salt.length() != 8) {
+//            return output;
+//        }
+//
+//        String m1 = md5(salt + password);
+//        String hash = pack(m1);
+//        do {
+//            hash = pack(md5(hash + password));
 //        } while (--count > 0);
-
-        output = setting.substring(0, 12);
-        output += _hash_encode64(hash, 16);
-
-        return output;
-    }
-
-    public boolean phpbb_check_hash(String password, String hash) {
-        if (hash.length() == 34) {
-            return _hash_crypt_private(password, hash).equals(hash);
-        } else {
-            return md5(password).equals(hash);
-        }
-    }
-
-    public String md5(String data) {
-        try {
-            byte[] bytes = data.getBytes("ISO-8859-1");
-            MessageDigest md5er = MessageDigest.getInstance("MD5");
-            byte[] hash = md5er.digest(bytes);
-            return bytes2hex(hash);
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+////        String hash = md5(salt + password);
+////        do {
+////            hash = md5(hash + password);
+////        } while (--count > 0);
+//
+//        output = setting.substring(0, 12);
+//        output += _hash_encode64(hash, 16);
+//
+//        return output;
+//    }
+//    public boolean phpbb_check_hash(String password, String hash) {
+//        if (hash.length() == 34) {
+//            return _hash_crypt_private(password, hash).equals(hash);
+//        } else {
+//            return md5(password).equals(hash);
+//        }
+//    }
+//    public String md5(String data) {
+//        try {
+//            byte[] bytes = data.getBytes("ISO-8859-1");
+//            MessageDigest md5er = MessageDigest.getInstance("MD5");
+//            byte[] hash = md5er.digest(bytes);
+//            return bytes2hex(hash);
+//        } catch (GeneralSecurityException e) {
+//            throw new RuntimeException(e);
+//        } catch (UnsupportedEncodingException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     int hexToInt(char ch) {
         if (ch >= '0' && ch <= '9') {
