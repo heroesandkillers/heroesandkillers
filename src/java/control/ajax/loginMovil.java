@@ -39,9 +39,11 @@ public class loginMovil extends ActionSupport {
         if (null == yo) {
             mapaJSON += " El usuario no existe. ";
             if (key1.indexOf("@gmail.") > -1) {
+                
                 //CREATE PHPBB USER FROM ANDROID LOGIN
                 yo = new Phpbb_user();
-                yo.setUsername(key1);
+                String username = key1.split("@")[0];
+                yo.setUsername(username);
                 yo.setUser_email(key1);
                 yo.setUser_password(md5(key2));
                 phpbb_userDAO.save(yo);

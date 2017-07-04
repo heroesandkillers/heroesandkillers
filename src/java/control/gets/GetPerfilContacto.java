@@ -1,6 +1,7 @@
 package control.gets;
 
 import com.google.gson.Gson;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import model.hibernate.HibernateUtil;
 import model.hibernate.Usuario;
@@ -8,14 +9,18 @@ import org.hibernate.Session;
 
 public class GetPerfilContacto extends ActionSupport {
 
-    private int id;
+    private int id = -1;
     public String mapaJSON = "";
 
     @Override
     public String execute() {
+        
+        if(-1 == id){
+            id = (Integer) ActionContext.getContext().getSession().get("usuario");
+        }
 
         Session session = HibernateUtil.getSessionFactory().openSession();
-        String peticion = "FROM Usuario WHERE id=" + id;
+        String peticion = "FROM Usuario WHERE id = " + id;
         Usuario usuario = (Usuario) session.createQuery(peticion).uniqueResult();
         session.close();
 
