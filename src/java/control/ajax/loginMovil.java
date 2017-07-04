@@ -42,15 +42,20 @@ public class loginMovil extends ActionSupport {
             mapaJSON += " El usuario no existe. ";
             if (key1.indexOf("@gmail.") > -1) {
 
-                //CREATE PHPBB USER FROM ANDROID LOGIN
-                yo = new Phpbb_user();
                 String[] arr = key1.split("@gmail.");
                 String username = arr[0];
-                yo.setUsername(username);
-                yo.setUsername_clean(username + "_" + arr[1]); //HAVE TO BE UNIQUE!
-                yo.setUser_email(key1);
-                yo.setUser_password(phpbb.phpbb_hash(key2));
-                phpbb_userDAO.save(yo);
+                
+                //GET USER MAIL TYPE
+                yo = phpbb_userDAO.loadPhpbb_user(username);
+                if (null == yo) {
+                    //CREATE PHPBB USER FROM ANDROID LOGIN
+                    yo = new Phpbb_user();
+                    yo.setUsername(username);
+                    yo.setUsername_clean(username + "_" + arr[1]); //HAVE TO BE UNIQUE!
+                    yo.setUser_email(key1);
+                    yo.setUser_password(phpbb.phpbb_hash(key2));
+                    phpbb_userDAO.save(yo);
+                }
 
             } else {
                 mapaJSON += " incorrecto (1)";
