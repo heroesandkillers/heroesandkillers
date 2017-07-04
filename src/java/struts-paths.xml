@@ -20,7 +20,7 @@
         
         <action name="/">
             <result>pages/index.jsp</result>
-            <result name="error" type="redirect">pages/index.jsp</result>
+            <result name="error">pages/index.jsp</result>
         </action>
         
         <action name="in" class="control.gets.GetAll">
