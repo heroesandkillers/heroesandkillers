@@ -15,6 +15,9 @@
         
         <action name="">
             <result>pages/index.jsp</result>
+        </action>        
+        <action name="/">
+            <result>pages/index.jsp</result>
         </action>
         
         <action name="in" class="control.gets.GetAll">
