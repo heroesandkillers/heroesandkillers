@@ -64,9 +64,11 @@ public class loginMovil extends ActionSupport {
         }
 
         String passForo;
-        boolean result = false;
         passForo = yo.getUser_password();
-        result = phpbb.phpbb_hash(key2) == passForo;
+        boolean result = false;
+        if (phpbb.phpbb_hash(key2) == passForo) {
+            result = true;
+        };
 
         //ACTIVAR EN CASO DE NO HABER FORO
 //            if (loginUser.equals("prueba")) {
