@@ -29,6 +29,8 @@
 //                }
 //            });
 
+            var arr = document.URL.split('/');
+            var result = arr[0] + "//" + arr[2].split(":")[0]; //remove port
             location.href = result + "/hak_static/pages/index_mob.html";
 
         </script>
