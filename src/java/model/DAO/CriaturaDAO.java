@@ -363,7 +363,7 @@ public class CriaturaDAO {
         }
 
         String nombre = nombres[(int) (nombres.length * Math.random())];
-        String apellido = apellidos[(int) (nombres.length * Math.random())];
+        String apellido = apellidos[(int) (apellidos.length * Math.random())];
 //        int nombre = (int) (100 * Math.random());
 //        int apellido = (int) (100 * Math.random());
 
