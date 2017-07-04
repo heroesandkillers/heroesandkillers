@@ -22,6 +22,8 @@ public class loginMovil extends ActionSupport {
     public String mapaJSON = "error: ";
 
     public String execute() throws Exception {
+        mapaJSON += " execute() key1";
+        
         Map login = ActionContext.getContext().getSession();
         Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -54,8 +56,7 @@ public class loginMovil extends ActionSupport {
         boolean result = false;
         passForo = yo.getUser_password();
         result = phpbb_check_hash(key2, passForo);
-        //result = true;
-//        else {
+
         //ACTIVAR EN CASO DE NO HABER FORO
 //            if (loginUser.equals("prueba")) {
 //                result = true;
@@ -63,7 +64,6 @@ public class loginMovil extends ActionSupport {
 //            yo = new Phpbb_user();
 //            yo.setUser_id(1);
 //            yo.setUsername(loginUser);
-//        }
 
         if (!result) {
             mapaJSON = "incorrecto (2)";
