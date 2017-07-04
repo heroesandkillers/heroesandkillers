@@ -31,7 +31,15 @@ public class Phpbb_user implements Serializable {
     private String user_sig = "";
     private String user_sig_bbcode_uid = "";
     private String user_sig_bbcode_bitfield = "";
+    private String user_from = "";
+    private String user_icq = "";
+    private String user_aim = "";
+    private String user_yim = "";
+    private String user_msnm = "";
     private String user_jabber = "";
+    private String user_website = "";
+    private String user_occ = "";
+    private String user_interests = "";
     private String user_actkey = "";
     private String user_newpasswd = "";
     private String user_form_salt = "";
@@ -149,6 +157,40 @@ public class Phpbb_user implements Serializable {
         return user_form_salt;
     }
 
+    public String getUser_from() {
+        return user_from;
+    }
+
+    public String getUser_icq() {
+        return user_icq;
+    }
+
+    public String getUser_aim() {
+        return user_aim;
+    }
+
+    public String getUser_yim() {
+        return user_yim;
+    }
+
+    public String getUser_msnm() {
+        return user_msnm;
+    }
+
+    public String getUser_website() {
+        return user_website;
+    }
+
+    public String getUser_occ() {
+        return user_occ;
+    }
+
+    public String getUser_interests() {
+        return user_interests;
+    }
+
+    
+    
     //
     public void setUser_permissions(String user_permissions) {
         this.user_permissions = user_permissions;
@@ -189,7 +231,7 @@ public class Phpbb_user implements Serializable {
     public void setUser_avatar_type(String user_avatar_type) {
         this.user_avatar_type = user_avatar_type;
     }
-    
+
     public void setUser_sig(String user_sig) {
         this.user_sig = user_sig;
     }
@@ -217,5 +259,38 @@ public class Phpbb_user implements Serializable {
     public void setUser_form_salt(String user_form_salt) {
         this.user_form_salt = user_form_salt;
     }
+
+    public void setUser_from(String user_from) {
+        this.user_from = user_from;
+    }
+
+    public void setUser_icq(String user_icq) {
+        this.user_icq = user_icq;
+    }
+
+    public void setUser_aim(String user_aim) {
+        this.user_aim = user_aim;
+    }
+
+    public void setUser_yim(String user_yim) {
+        this.user_yim = user_yim;
+    }
+
+    public void setUser_msnm(String user_msnm) {
+        this.user_msnm = user_msnm;
+    }
+
+    public void setUser_website(String user_website) {
+        this.user_website = user_website;
+    }
+
+    public void setUser_occ(String user_occ) {
+        this.user_occ = user_occ;
+    }
+
+    public void setUser_interests(String user_interests) {
+        this.user_interests = user_interests;
+    }
+    
 
 }
