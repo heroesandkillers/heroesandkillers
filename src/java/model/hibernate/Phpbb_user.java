@@ -28,6 +28,7 @@ public class Phpbb_user implements Serializable {
     private String user_colour = "";
     private String user_avatar = "";
     private String user_avatar_type = "";
+    private String user_sig = "";
     private String user_sig_bbcode_uid = "";
     private String user_sig_bbcode_bitfield = "";
     private String user_jabber = "";
@@ -120,6 +121,10 @@ public class Phpbb_user implements Serializable {
         return user_avatar_type;
     }
 
+    public String getUser_sig() {
+        return user_sig;
+    }
+
     public String getUser_sig_bbcode_uid() {
         return user_sig_bbcode_uid;
     }
@@ -183,6 +188,10 @@ public class Phpbb_user implements Serializable {
 
     public void setUser_avatar_type(String user_avatar_type) {
         this.user_avatar_type = user_avatar_type;
+    }
+    
+    public void setUser_sig(String user_sig) {
+        this.user_sig = user_sig;
     }
 
     public void setUser_sig_bbcode_uid(String user_sig_bbcode_uid) {
