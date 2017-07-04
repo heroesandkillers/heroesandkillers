@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <title>Heroes and Killers</title>
 
-        <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<!--        <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>-->
         <script type="text/javascript">
 
             $(document).ready(function () {
@@ -18,9 +18,9 @@
 //                console.log("java document width: " + width);
 
 //                if (width >= 760) {
-                url = result + "/hak_static/pages/loadIndex.html";
+                //url = result + "/hak_static/pages/loadIndex.html";
                 //$("body").load(url);
-                location.href = url;
+                location.href = result + "/hak_static/pages/index_mob.html";
 //                } else {
 //                window.isMobile = true;
 //                var org = "/hakMovil/assets";
