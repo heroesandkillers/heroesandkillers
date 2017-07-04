@@ -15,7 +15,25 @@ public class Phpbb_user implements Serializable {
     private String username;
     private String user_password;
     private String user_email;
-    private String user_lang;
+    private String user_lang = "";
+
+    //NOT DEFAULT DB VALUES
+    private String user_permissions = "";
+    private String user_ip = "";
+    private String username_clean = "";
+    private String user_birthday = "";
+    private String user_lastpage = "";
+    private String user_last_confirm_key = "";
+    private String user_timezone = "";
+    private String user_colour = "";
+    private String user_avatar = "";
+    private String user_avatar_type = "";
+    private String user_sig_bbcode_uid = "";
+    private String user_sig_bbcode_bitfield = "";
+    private String user_jabber = "";
+    private String user_actkey = "";
+    private String user_newpasswd = "";
+    private String user_form_salt = "";
 
     //    @GenericGenerator(name="user_id" , strategy="increment")
     @Id
@@ -60,4 +78,13 @@ public class Phpbb_user implements Serializable {
     public void setUser_lang(String user_lang) {
         this.user_lang = user_lang;
     }
+
+    //NOT DEFAULT VALUES
+//    public String getUser_permissions() {
+//        return user_permissions;
+//    }
+//
+//    public void setUser_permissions(String user_permissions) {
+//        this.user_permissions = user_permissions;
+//    }
 }
