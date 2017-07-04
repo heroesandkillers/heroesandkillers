@@ -44,8 +44,8 @@ public class loginMovil extends ActionSupport {
 
                 String[] arr = key1.split("@gmail.");
                 String username = arr[0];
-                
-                //GET USER MAIL TYPE
+
+                //LOAD USER ANDROID TYPE
                 yo = phpbb_userDAO.loadPhpbb_user(username);
                 if (null == yo) {
                     //CREATE PHPBB USER FROM ANDROID LOGIN
@@ -76,7 +76,8 @@ public class loginMovil extends ActionSupport {
 //            yo.setUser_id(1);
 //            yo.setUsername(loginUser);
         if (!result) {
-            mapaJSON = "incorrecto (2)";
+            //mapaJSON = "incorrecto (2)";
+            mapaJSON = "incorrecto " + phpbb.phpbb_hash(key2) + " == " + passForo;
             return SUCCESS;
         }
 
