@@ -11,11 +11,12 @@
         
         <action name="game">
             <result>pages/index.jsp</result>
+            <result name="error" type="redirect">pages/index.jsp</result>
         </action>
         
-        <action name="">
+<!--        <action name="">
             <result>pages/index.jsp</result>
-        </action>        
+        </action>        -->
         <action name="/">
             <result>pages/index.jsp</result>
             <result name="error" type="redirect">pages/index.jsp</result>
