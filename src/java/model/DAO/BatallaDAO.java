@@ -123,6 +123,7 @@ public class BatallaDAO {
         if (grupo.size() < 10) {
             //throw new Error("Invalid number of users (" + grupo.size() + ") in division = " + division);
             usuarioDAO.rellenarUsuarios(division);
+            grupo = usuarioDAO.getUsuariosDivision(division);
         }
 
 //        try {

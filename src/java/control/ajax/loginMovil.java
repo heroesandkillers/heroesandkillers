@@ -76,7 +76,7 @@ public class loginMovil extends ActionSupport {
 //            yo.setUsername(loginUser);
         if (!result) {
             //mapaJSON = "incorrecto (2)";
-            mapaJSON = "incorrecto " + phpbb.phpbb_hash(key2) + " == " + passForo;
+            mapaJSON = " incorrecto " + phpbb.phpbb_hash(key2) + " == " + passForo;
             return SUCCESS;
         }
 

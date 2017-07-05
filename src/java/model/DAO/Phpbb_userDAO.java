@@ -19,7 +19,7 @@ public class Phpbb_userDAO {
     }
 
     public Phpbb_user loadPhpbb_user(String user) throws SQLException {
-        String peticion = "FROM Phpbb_user WHERE username = '" + user + "'";
+        String peticion = "FROM Phpbb_user WHERE username_clean = '" + user + "'"; //username_clean is the login phpbb (key)
         return (Phpbb_user) session.createQuery(peticion).uniqueResult();
     }
 
