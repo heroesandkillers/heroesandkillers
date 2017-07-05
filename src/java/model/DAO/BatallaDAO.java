@@ -121,7 +121,8 @@ public class BatallaDAO {
         }
 
         if (grupo.size() < 10) {
-            throw new Error("Invalid number of users (" + grupo.size() + ") in division = " + division);
+            //throw new Error("Invalid number of users (" + grupo.size() + ") in division = " + division);
+            usuarioDAO.rellenarUsuarios(division);
         }
 
 //        try {
@@ -149,7 +150,7 @@ public class BatallaDAO {
 //            int posRelativa = posicion + divisionDAO.posicion0Division(divisionDAO.divisionAbsoluta(division));
 //            if (grupo.size() < 10 && posRelativa == 1) {
 //                int numero = divisionDAO.numUsuariosDivision(division);
-//                usuarioDAO.rellenarUsuarios(division, posicion, numero);
+//                usuarioDAO.rellenarUsuarios(division, numero);
 //            }
 //        }
         usuarioDAO.ordenarPosiciones(division);

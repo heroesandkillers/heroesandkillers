@@ -6,17 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.hibernate.HibernateUtil;
 import model.hibernate.Phpbb_user;
 import model.hibernate.Trofeo;
 import model.hibernate.Usuario;
 import mysql.Mysql;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -184,9 +179,8 @@ public class UsuarioDAO {
         int posRelativa = posicion + divisionDAO.posicion0Division(division);
         if (posRelativa == 1) {
             String peticion = "FROM Usuario WHERE posicion >= " + posicion;
-            if (session.createQuery(peticion).list().isEmpty()) {
-                int numero = divisionDAO.numUsuariosDivision(division);
-                rellenarUsuarios(division, posicion, numero);
+            if (session.createQuery(peticion).list().isEmpty()) {                
+                rellenarUsuarios(division);
             }
         }
         Usuario usuario = getNewUsuario();
@@ -251,14 +245,35 @@ public class UsuarioDAO {
         }
 
     }
+    
+    public void rellenarUsuarios(int division) {
+        DivisionDAO divisionDAO = new DivisionDAO(session);
+        int numero = divisionDAO.numUsuariosDivision(division);
+        rellenarUsuarios(division, numero);
+    }
 
-    public void rellenarUsuarios(int division, int posicion, int numero) {
+    public void rellenarUsuarios(int division, int numero) {
         int posRelativa = 1;
-        CriaturaDAO criaturaDAO = new CriaturaDAO(session);
+        DivisionDAO divisionDAO = new DivisionDAO(session);
+        int posicion = divisionDAO.posicion0Division(division);
+        CriaturaDAO criaturaDAO = new CriaturaDAO(session);        
 
         for (int i = 0; i < numero; i++) {
-            Usuario usuario = new Usuario();
-            DivisionDAO divisionDAO = new DivisionDAO(session);
+            
+            //CHECK POSITION USER NOT EXISTS YET
+            Mysql mysql = new Mysql();
+            int[] params = {posicion};
+            ResultSet rs = mysql.query("SELECT count(*) FROM hak_usuarios WHERE posicion = ?", params);
+            try {
+                rs.next();
+                if (rs.getInt(1) > 0) {
+                    continue;
+                }
+            } catch (Exception e) {
+                throw new Error("rellenarUsuarios ERROR");
+            }
+
+            Usuario usuario = new Usuario();            
             usuario.setDivision(divisionDAO.subDivision(division, posRelativa));
             usuario.setPosicion(posicion);
             usuario.setId(null);
