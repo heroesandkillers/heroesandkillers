@@ -775,17 +775,21 @@ public class BatallaDAO {
             }
         }
 
-        p = local.getPuntos().split(",");
-        puntos = Integer.parseInt(p[0]);
-        ratio = p[1].split("-");
-        local.setPuntos((puntos + p1) + "," + (Integer.parseInt(ratio[0]) + resultado1) + "-" + (Integer.parseInt(ratio[1]) + resultado2));
-        update(local);
+        try {
+            p = local.getPuntos().split(",");
+            puntos = Integer.parseInt(p[0]);
+            ratio = p[1].split("-");
+            local.setPuntos((puntos + p1) + "," + (Integer.parseInt(ratio[0]) + resultado1) + "-" + (Integer.parseInt(ratio[1]) + resultado2));
+            update(local);
 
-        p = visitante.getPuntos().split(",");
-        puntos = Integer.parseInt(p[0]);
-        ratio = p[1].split("-");
-        visitante.setPuntos((puntos + p2) + "," + (Integer.parseInt(ratio[0]) + resultado2) + "-" + (Integer.parseInt(ratio[1]) + resultado1));
-        update(visitante);
+            p = visitante.getPuntos().split(",");
+            puntos = Integer.parseInt(p[0]);
+            ratio = p[1].split("-");
+            visitante.setPuntos((puntos + p2) + "," + (Integer.parseInt(ratio[0]) + resultado2) + "-" + (Integer.parseInt(ratio[1]) + resultado1));
+            update(visitante);
+        } catch (Exception e) {
+            //CATCH BUGGED USER AND CONTINUE
+        }
     }
 
     public void corregirResultados(long id, EstadisticasBatalla anterior, EstadisticasBatalla nuevo) {
