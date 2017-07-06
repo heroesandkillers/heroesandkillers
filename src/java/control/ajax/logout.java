@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import model.DAO.UsuarioDAO;
 import model.hibernate.HibernateUtil;
 import model.hibernate.Usuario;
@@ -19,12 +22,12 @@ public class logout extends ActionSupport {
         try {
             Map login = ActionContext.getContext().getSession();
             Integer userId = (Integer) ActionContext.getContext().getSession().get("usuario");
-            
-            if(null == userId){
+
+            if (null == userId) {
                 mapaJSON = "not loged";
                 return SUCCESS;
             }
-            
+
             phpbb_logout(userId);
             login.remove("usuario");
 
@@ -40,15 +43,19 @@ public class logout extends ActionSupport {
         UsuarioDAO usuarioDAO = new UsuarioDAO(session);
         Usuario usuario = usuarioDAO.getUsuario(id);
         int phpbb_id = usuario.getPhpbb_user().getUser_id();
-
+        
         Connection conn;
-        String userName = "hak";
-        String password = "&MOVy1PV";
-        String url = "jdbc:mysql://localhost:3306/hak";
+        try {
+            Context context = new InitialContext();
+//            DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/hak");
+            DataSource dataSource = (DataSource) context.lookup("jdbc/hak");
+            conn = dataSource.getConnection();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(url, userName, password);
 
             String peticion = "DELETE FROM phpbb_sessions WHERE session_user_id = " + phpbb_id;
             Statement st = conn.createStatement();
