@@ -8,7 +8,6 @@ import model.DAO.BatallaDAO;
 import model.DAO.UsuarioDAO;
 import model.hibernate.Batalla;
 import model.hibernate.HibernateUtil;
-import model.hibernate.Usuario;
 import org.hibernate.Session;
 
 public class GetBatallasAcademia extends ActionSupport {

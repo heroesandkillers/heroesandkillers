@@ -7,17 +7,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import control.ajax.CalendarioAction;
 import control.ajax.CriaturasAction;
 import control.ajax.DivisionesAction;
-import model.DAO.Phpbb_userDAO;
-import model.DAO.UsuarioDAO;
-import model.hibernate.HibernateUtil;
-import model.hibernate.Phpbb_user;
-//import model.DAO.DivisionDAO;
-//import model.DAO.UsuarioDAO;
-//import model.hibernate.Division;
-//import model.hibernate.HibernateUtil;
 import model.hibernate.Usuario;
-import org.hibernate.Session;
-//import org.hibernate.Session;
 
 public class GetAll extends ActionSupport {
 
@@ -89,7 +79,7 @@ public class GetAll extends ActionSupport {
         return gson.toJson(all);
     }
 
-    public class All {
+    private class All {
 
         public String perfil;
         public String calendario;

@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.*;
 import model.hibernate.*;
 import model.jsonClass.Alineacion;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
@@ -84,7 +85,7 @@ public class CriaturaDAO {
 
     public List<CriaturaMazmorra> getMazmorrasRango(String peticionAtributos) {
         System.out.println("peticionAtributos = " + peticionAtributos);
-        
+
         //if not creatures
         llenarMazmorras();
 
@@ -95,7 +96,11 @@ public class CriaturaDAO {
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_WEEK, 4);
-        String peticion = "FROM CriaturaMazmorra WHERE tiempoVenta BETWEEN " + new Date().getTime() / 1000 + " AND " + calendar.getTimeInMillis() / 1000;
+
+        Map<String, String> map = new HashMap();
+        String peticion = "FROM CriaturaMazmorra WHERE tiempoVenta BETWEEN :start AND :end";
+        map.put("start", "" + new Date().getTime() / 1000);
+        map.put("end", "" + calendar.getTimeInMillis() / 1000);
 
         String[] arrayPeticiones = peticionAtributos.split(";");
 
@@ -105,19 +110,31 @@ public class CriaturaDAO {
                 continue;
             }
             String[] arrayPeticion = peticionJSON.split(",");
-            peticion = peticion + " AND " + arrayPeticion[0] + " BETWEEN " + arrayPeticion[1] + " AND " + arrayPeticion[2];
+            peticion += " AND :value_" + i + " BETWEEN :start_" + i + " AND :end_" + i;
+            map.put("value_" + i, arrayPeticion[0]);
+            map.put("start_" + i, arrayPeticion[1]);
+            map.put("end_" + i, arrayPeticion[2]);
         }
 
-        peticion = peticion + " ORDER BY tiempoVenta";
-        return session.createQuery(peticion).list();
+        peticion += " ORDER BY tiempoVenta";
+
+        Query query = session.createQuery(peticion);
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+        return query.list();
     }
 
     public List<CriaturaMazmorra> getMisPujas(int id, List<Long> lista) {
         List<CriaturaMazmorra> criaturas = new ArrayList();
+
         for (int i = 0; i < lista.size(); i++) {
-            String peticion = "FROM CriaturaMazmorra WHERE id = " + lista.get(i);
+            String peticion = "FROM CriaturaMazmorra WHERE id = :id";
+            Query query = session.createQuery(peticion);
+            query.setParameter(id, lista.get(i));
+
             try {
-                criaturas.add((CriaturaMazmorra) session.createQuery(peticion).uniqueResult());
+                criaturas.add((CriaturaMazmorra) query.uniqueResult());
             } catch (Exception e) {
                 lista.remove(lista.get(i));
                 UsuarioDAO usuarioDAO = new UsuarioDAO(session);
@@ -129,65 +146,69 @@ public class CriaturaDAO {
         }
         return criaturas;
     }
+    //    public List<Criatura> getCriaturasUsuario(Usuario usuario) {
+    //        Date date = new Date();
+    //
+    //        String peticionPujas = "FROM CriaturaMazmorra WHERE usuario = " + usuario.getId() + " AND tiempoVenta < '" + date.getTime() + "'";
+    //        List<CriaturaMazmorra> criaturasMazmorra = session.createQuery(peticionPujas).list();
+    //
+    //        for (int i = 0; i < criaturasMazmorra.size(); i++) {
+    //
+    //            CriaturaMazmorra criatura = criaturasMazmorra.get(i);
+    //            toCriatura(criatura);
+    //
+    //            String[] pujas = criatura.getPujas().split(";");
+    //            long precio = Long.parseLong(pujas[pujas.length].split(",")[1]);
+    //
+    //            try {
+    //                TraspasoDAO traspasoDAO = new TraspasoDAO(session);
+    //                Traspaso traspaso = traspasoDAO.loadTraspaso(criatura.getId());
+    //                traspaso.setFecha(date);
+    //                traspaso.setComprador(usuario);
+    //                traspaso.setPrecio(precio);
+    //                update(traspaso);
+    //
+    //            } catch (Exception e) {
+    //            }
+    //
+    //            long precioAnterior = precioCriatura(criatura);
+    //            long nuevoPrecio = (long) ((precio + precioAnterior) / 2);
+    //
+    //            String peticion = criaturaPrecioIgual(criatura);
+    //            CriaturaPrecio criatPrecio = (CriaturaPrecio) session.createQuery(peticion).uniqueResult();
+    //            criatPrecio.setPrecio(nuevoPrecio);
+    //            update(criatPrecio);
+    //
+    //
+    //            String des = criaturaPrecioPeor(criatura) + " AND precio > " + nuevoPrecio;
+    //            List<CriaturaPrecio> desfasados1 = session.createQuery(des).list();
+    //            for (CriaturaPrecio desfasado : desfasados1) {
+    //                desfasado.setPrecio(nuevoPrecio);
+    //                update(desfasado);
+    //            }
+    //
+    //            String des2 = criaturaPrecioMejor(criatura) + " AND precio < " + nuevoPrecio;
+    //            List<CriaturaPrecio> desfasados2 = session.createQuery(des2).list();
+    //            for (CriaturaPrecio desfasado : desfasados2) {
+    //                desfasado.setPrecio(nuevoPrecio);
+    //                update(desfasado);
+    //            }
+    //        }
+    //    }
 
-//    public List<Criatura> getCriaturasUsuario(Usuario usuario) {
-//        Date date = new Date();
-//
-//        String peticionPujas = "FROM CriaturaMazmorra WHERE usuario = " + usuario.getId() + " AND tiempoVenta < '" + date.getTime() + "'";
-//        List<CriaturaMazmorra> criaturasMazmorra = session.createQuery(peticionPujas).list();
-//
-//        for (int i = 0; i < criaturasMazmorra.size(); i++) {
-//
-//            CriaturaMazmorra criatura = criaturasMazmorra.get(i);
-//            toCriatura(criatura);
-//
-//            String[] pujas = criatura.getPujas().split(";");
-//            long precio = Long.parseLong(pujas[pujas.length].split(",")[1]);
-//
-//            try {
-//                TraspasoDAO traspasoDAO = new TraspasoDAO(session);
-//                Traspaso traspaso = traspasoDAO.loadTraspaso(criatura.getId());
-//                traspaso.setFecha(date);
-//                traspaso.setComprador(usuario);
-//                traspaso.setPrecio(precio);
-//                update(traspaso);
-//
-//            } catch (Exception e) {
-//            }
-//
-//            long precioAnterior = precioCriatura(criatura);
-//            long nuevoPrecio = (long) ((precio + precioAnterior) / 2);
-//
-//            String peticion = criaturaPrecioIgual(criatura);
-//            CriaturaPrecio criatPrecio = (CriaturaPrecio) session.createQuery(peticion).uniqueResult();
-//            criatPrecio.setPrecio(nuevoPrecio);
-//            update(criatPrecio);
-//
-//
-//            String des = criaturaPrecioPeor(criatura) + " AND precio > " + nuevoPrecio;
-//            List<CriaturaPrecio> desfasados1 = session.createQuery(des).list();
-//            for (CriaturaPrecio desfasado : desfasados1) {
-//                desfasado.setPrecio(nuevoPrecio);
-//                update(desfasado);
-//            }
-//
-//            String des2 = criaturaPrecioMejor(criatura) + " AND precio < " + nuevoPrecio;
-//            List<CriaturaPrecio> desfasados2 = session.createQuery(des2).list();
-//            for (CriaturaPrecio desfasado : desfasados2) {
-//                desfasado.setPrecio(nuevoPrecio);
-//                update(desfasado);
-//            }
-//        }
-//    }
     public List<Criatura> getCriaturasUsuario(int id) {
-        String peticion = "FROM Criatura WHERE usuario = " + id;
-        List<Criatura> criaturas = session.createQuery(peticion).list();
+        String peticion = "FROM Criatura WHERE usuario = :usuario";
+        Query query = session.createQuery(peticion);
+        query.setParameter("usuario", id);
+        List<Criatura> criaturas = query.list();
         return criaturas;
     }
 
     public List<CriaturaAcademia> getAcademiaUsuario(int usuarioId) {
-        String peticion = "FROM CriaturaAcademia WHERE usuario = " + usuarioId;
-        List<CriaturaAcademia> lista = session.createQuery(peticion).list();
+        String peticion = "FROM CriaturaAcademia WHERE usuario = :usuario";
+        Query query = session.createQuery(peticion);
+        query.setParameter("usuario", usuarioId);
+        List<CriaturaAcademia> lista = query.list();
 
         UsuarioDAO usuarioDAO = new UsuarioDAO(session);
         Usuario usuario = usuarioDAO.loadUsuario(usuarioId);
@@ -195,7 +216,7 @@ public class CriaturaDAO {
             for (int i = 0; i < 10 - lista.size(); i++) {
                 crearCriaturaAcademia(usuario);
             }
-            lista = session.createQuery(peticion).list();
+            lista = query.list();
         }
         return lista;
     }
@@ -245,7 +266,7 @@ public class CriaturaDAO {
         CriaturaMazmorra criatura = (CriaturaMazmorra) crearCriaturaMazmorra();
         criatura.setTiempoVenta(date);
 
-        save((CriaturaMazmorra) criatura);
+        save(criatura);
     }
 
     public Criaturas crearCriaturaMazmorra() {
@@ -281,11 +302,16 @@ public class CriaturaDAO {
     }
 
     public void eliminarCriaturas(Usuario usuario) {
-        session.createQuery("delete FROM Criatura WHERE usuario = " + usuario.getId()).executeUpdate();
-        session.createQuery("delete FROM CriaturaAcademia WHERE usuario = " + usuario.getId()).executeUpdate();
+        Query query = session.createQuery("delete FROM Criatura WHERE usuario = :usuario");
+        query.setParameter("usuario", usuario.getId());
+        query.executeUpdate();
+
+        query = session.createQuery("delete FROM CriaturaAcademia WHERE usuario = :usuario");
+        query.setParameter("usuario", usuario.getId());
+        query.executeUpdate();
     }
 
-    public Criaturas randomCriatura(Criaturas criatura, int num, int edadInicial, int max) {
+    private Criaturas randomCriatura(Criaturas criatura, int num, int edadInicial, int max) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -edadInicial);
@@ -339,7 +365,7 @@ public class CriaturaDAO {
         return criatura;
     }
 
-    public String nombre(int num) {
+    private String nombre(int num) {
         //http://www.wizards.com
         String[] nombres;
         String[] apellidos;
@@ -379,19 +405,25 @@ public class CriaturaDAO {
         String alineacionString;
 
         if (!tipo.equals("academia")) {
-            peticionEquipo = "FROM Criatura WHERE usuario = " + usuario.getId();
-            equipo = session.createQuery(peticionEquipo).list();
+            peticionEquipo = "FROM Criatura WHERE usuario = :usuario";
+            Query query = session.createQuery(peticionEquipo);
+            query.setParameter("usuario", usuario.getId());
+            equipo = query.list();
             alineacionString = usuario.getAlin();
         } else {
-            peticionEquipo = "FROM CriaturaAcademia WHERE usuario = " + usuario.getId();
-            equipo = session.createQuery(peticionEquipo).list();
+            peticionEquipo = "FROM CriaturaAcademia WHERE usuario = :usuario";
+            Query query = session.createQuery(peticionEquipo);
+            query.setParameter("usuario", usuario.getId());
+            equipo = query.list();
 
             if (equipo.isEmpty()) {
                 for (int i = 0; i < 10; i++) {
                     crearCriaturaAcademia(usuario);
                 }
-                peticionEquipo = "FROM CriaturaAcademia WHERE usuario = " + usuario.getId();
-                equipo = session.createQuery(peticionEquipo).list();
+                peticionEquipo = "FROM CriaturaAcademia WHERE usuario = :usuario";
+                query = session.createQuery(peticionEquipo);
+                query.setParameter("usuario", usuario.getId());
+                equipo = query.list();
             }
             alineacionString = usuario.getAlinAcad();
         }
@@ -510,12 +542,14 @@ public class CriaturaDAO {
         System.out.println("111");
         String peticionCriatura;
         if (!tipo.equals("academia")) {
-            peticionCriatura = "FROM Criatura WHERE id = " + id;
+            peticionCriatura = "FROM Criatura WHERE id = :id";
         } else {
-            peticionCriatura = "FROM CriaturaAcademia WHERE id = " + id;
+            peticionCriatura = "FROM CriaturaAcademia WHERE id = :id";
         }
 
-        Criaturas criatura = (Criaturas) session.createQuery(peticionCriatura).uniqueResult();
+        Query query = session.createQuery(peticionCriatura);
+        query.setParameter("id", id);
+        Criaturas criatura = (Criaturas) query.uniqueResult();
 
         criatura.setClases(xpClases(criatura.getClases(), clase));
 
@@ -529,7 +563,7 @@ public class CriaturaDAO {
         return convertir(criatura, posicion, actitud, clase);
     }
 
-    public String xpClases(String clasesString, String clase) {
+    private String xpClases(String clasesString, String clase) {
 
         String[] clases = {};
         String nuevasClases = "";
@@ -590,11 +624,11 @@ public class CriaturaDAO {
         return longer;
     }
 
-    public static boolean isInteger(String s) {
+    private static boolean isInteger(String s) {
         return isInteger(s, 10);
     }
 
-    public static boolean isInteger(String s, int radix) {
+    private static boolean isInteger(String s, int radix) {
         if (s.isEmpty()) {
             return false;
         }
@@ -613,24 +647,9 @@ public class CriaturaDAO {
         return true;
     }
 
-    public long[] toLong(String[] num) {
+    private Criaturas convertir(Criaturas criatura, int posicion, String actitud, String clase) {
 
-        long[] lista;
-        lista = new long[6];
-
-        for (int i = 0; i < 6; i++) {
-            if (isInteger(num[i])) {
-                lista[i] = Long.parseLong(num[i]);
-            } else {
-                lista[i] = 0;
-            }
-        }
-        return lista;
-    }
-
-    public Criaturas convertir(Criaturas criatura, int posicion, String actitud, String clase) {
-
-        int x = (int) (posicion / 5);
+        int x = (posicion / 5);
         int y = posicion - (x * 5);
 
         criatura.setFuerza((double) Math.round(criatura.getFuerza()));
@@ -686,7 +705,7 @@ public class CriaturaDAO {
         }
     }
 
-    public void entrenar(int editorId) {
+    private void entrenar(int editorId) {
         TiempoDAO tiempoDAO = new TiempoDAO(session);
         Tiempo tiempo = tiempoDAO.loadTiempo("entreno");
 
@@ -696,7 +715,7 @@ public class CriaturaDAO {
         }
     }
 
-    public double valEntreno(double num) {
+    private double valEntreno(double num) {
         if (num > 100) {
             num = 100;
         } else if (num < 0) {
@@ -818,7 +837,7 @@ public class CriaturaDAO {
         }
     }
 
-    public String getClase(String clases) {
+    private String getClase(String clases) {
         try {
             return clases.split(";")[0].split(":")[0];
         } catch (Exception e) {
@@ -866,7 +885,7 @@ public class CriaturaDAO {
         return evol(criatura, evolucion);
     }
 
-    public Criaturas evol(Criaturas criatura, List<Evolucion> evolucion) {
+    private Criaturas evol(Criaturas criatura, List<Evolucion> evolucion) {
         Gson gson = new Gson();
 
         Evolucion evol = new Evolucion();
@@ -877,8 +896,8 @@ public class CriaturaDAO {
         evol.co = (int) (double) criatura.getConstitucion();
         evol.df = (int) (double) criatura.getDefensa();
         evol.rc = (int) (double) criatura.getReaccion();
-        evol.fr = (int) criatura.getFrescura();
-        evol.mo = (int) criatura.getMoral();
+        evol.fr = criatura.getFrescura();
+        evol.mo = criatura.getMoral();
         evol.xp = (int) (double) criatura.getXp();
 
         evolucion.add(evol);
@@ -922,30 +941,26 @@ public class CriaturaDAO {
         }
     }
 
-    public long precioCriatura(long id) {
-        Criaturas criatura = (Criaturas) loadCriatura(id);
+    private long precioCriatura(long id) {
+        Criaturas criatura = loadCriatura(id);
         return precioCriatura(criatura);
     }
 
-    public long precioCriatura(Criaturas criatura) {
+    private long precioCriatura(Criaturas criatura) {
+        Long precio;
+        Query query = criaturaPrecioIgual(criatura, "SELECT precio");
+        precio = (Long) query.setMaxResults(1).uniqueResult();
 
-        long precio = 0;
+        if (precio == null) {
 
-        String peticion = "SELECT precio " + criaturaPrecioIgual(criatura);
-
-        if (session.createQuery(peticion).setMaxResults(1).uniqueResult() != null) {
-            precio = (Long) session.createQuery(peticion).uniqueResult();
-
-        } else {
-
-            String peticion2 = "SELECT max(precio) " + criaturaPrecioPeor(criatura);
-            Object obj = session.createQuery(peticion2).uniqueResult();
+            query = criaturaPrecioPeor(criatura, "SELECT max(precio) ", "");
+            Object obj = query.uniqueResult();
 
             if (obj != null) {
                 precio = (Long) obj;
             }
             if (precio < 50) {
-                precio = 50;
+                precio = 50L;
             }
 
             CriaturaPrecio criatPrecio = new CriaturaPrecio();
@@ -976,7 +991,7 @@ public class CriaturaDAO {
         return precio;
     }
 
-    public int getEdad(Long edad) {
+    private int getEdad(Long edad) {
         Calendar now = Calendar.getInstance();
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(edad);
@@ -990,28 +1005,57 @@ public class CriaturaDAO {
         return meses;
     }
 
-    public String criaturaPrecioIgual(Criaturas criatura) {
-        return "FROM CriaturaPrecio WHERE sexo = " + criatura.getSexo() + " AND raza = '" + criatura.getRaza() + "' AND elemento = '" + criatura.getElemento()
-                + "' AND mutacion = '" + criatura.getMutacion() + "' AND fuerza = " + (int) (criatura.getFuerza() / 5) + " AND magia = " + (int) (criatura.getMagia() / 5)
-                + " AND agilidad = " + (int) (criatura.getAgilidad() / 5) + " AND reflejos = " + (int) (criatura.getReflejos() / 5) + " AND constitucion = " + (int) (criatura.getConstitucion() / 5)
-                + " AND defensa = " + (int) (criatura.getDefensa() / 5) + " AND reaccion = " + (int) (criatura.getReaccion() / 5) + " AND xp = " + (int) (criatura.getXp() / 5);
+    private Query criaturaPrecioIgual(Criaturas criatura, String select) {
+        String peticion = select + " FROM CriaturaPrecio WHERE sexo = :sexo AND raza = :raza AND elemento = :elemento "
+                + "' AND mutacion = :mutacion AND fuerza = :fuerza AND magia = :magia "
+                + " AND agilidad = :agilidad AND reflejos = :reflejos AND constitucion = :constitucion "
+                + " AND defensa = :defensa AND reaccion = :reaccion AND xp = :xp";
 //                + " AND edad = " + (int) (criatura.getEdad() / 30);
+
+        Query query = session.createQuery(peticion);
+        query.setParameter("sexo", criatura.getSexo());
+        query.setParameter("raza", criatura.getRaza());
+        query.setParameter("elemento", criatura.getElemento());
+        query.setParameter("mutacion", criatura.getMutacion());
+        query.setParameter("fuerza", criatura.getFuerza() / 5);
+        query.setParameter("magia", criatura.getMagia() / 5);
+        query.setParameter("agilidad", criatura.getAgilidad() / 5);
+        query.setParameter("reflejos", criatura.getReflejos() / 5);
+        query.setParameter("constitucion", criatura.getConstitucion() / 5);
+        query.setParameter("defensa", criatura.getDefensa() / 5);
+        query.setParameter("reaccion", criatura.getReaccion() / 5);
+        query.setParameter("xp", criatura.getXp() / 5);
+        return query;
     }
 
-    public String criaturaPrecioMejor(Criaturas criatura) {
-        return "FROM CriaturaPrecio WHERE sexo = " + criatura.getSexo() + " AND raza = '" + criatura.getRaza() + "' AND elemento = '" + criatura.getElemento()
-                + "' AND mutacion = '" + criatura.getMutacion() + "' AND fuerza >= " + (int) (criatura.getFuerza() / 5) + " AND magia >= " + (int) (criatura.getMagia() / 5)
-                + " AND agilidad >= " + (int) (criatura.getAgilidad() / 5) + " AND reflejos >= " + (int) (criatura.getReflejos() / 5) + " AND constitucion >= " + (int) (criatura.getConstitucion() / 5)
-                + " AND defensa >= " + (int) (criatura.getDefensa() / 5) + " AND reaccion >= " + (int) (criatura.getReaccion() / 5) + " AND xp >= " + (int) (criatura.getXp() / 5);
-//                + " AND edad <= " + (int) (criatura.getEdad() / 30);
-    }
-
-    public String criaturaPrecioPeor(Criaturas criatura) {
-        return "FROM CriaturaPrecio WHERE sexo = " + criatura.getSexo() + " AND raza = '" + criatura.getRaza() + "' AND elemento = '" + criatura.getElemento()
-                + "' AND mutacion = '" + criatura.getMutacion() + "' AND fuerza <= " + (int) (criatura.getFuerza() / 5) + " AND magia <= " + (int) (criatura.getMagia() / 5)
-                + " AND agilidad <= " + (int) (criatura.getAgilidad() / 5) + " AND reflejos <= " + (int) (criatura.getReflejos() / 5) + " AND constitucion <= " + (int) (criatura.getConstitucion() / 5)
-                + " AND defensa <= " + (int) (criatura.getDefensa() / 5) + " AND reaccion <= " + (int) (criatura.getReaccion() / 5) + " AND xp <= " + (int) (criatura.getXp() / 5);
+//    private String criaturaPrecioMejor(Criaturas criatura) {
+//        return "FROM CriaturaPrecio WHERE sexo = " + criatura.getSexo() + " AND raza = '" + criatura.getRaza() + "' AND elemento = '" + criatura.getElemento()
+//                + "' AND mutacion = '" + criatura.getMutacion() + "' AND fuerza >= " + (int) (criatura.getFuerza() / 5) + " AND magia >= " + (int) (criatura.getMagia() / 5)
+//                + " AND agilidad >= " + (int) (criatura.getAgilidad() / 5) + " AND reflejos >= " + (int) (criatura.getReflejos() / 5) + " AND constitucion >= " + (int) (criatura.getConstitucion() / 5)
+//                + " AND defensa >= " + (int) (criatura.getDefensa() / 5) + " AND reaccion >= " + (int) (criatura.getReaccion() / 5) + " AND xp >= " + (int) (criatura.getXp() / 5);
+////                + " AND edad <= " + (int) (criatura.getEdad() / 30);
+//    }
+    private Query criaturaPrecioPeor(Criaturas criatura, String select, String where) {
+        String peticion = select + " FROM CriaturaPrecio WHERE sexo = :sexo AND raza = :raza AND elemento = :elemento "
+                + " AND mutacion = :mutacion AND fuerza <= :fuerza AND magia <= :magia "
+                + " AND agilidad <= :agilidad AND reflejos <= :reflejos AND constitucion <= :constitucion "
+                + " AND defensa <= :defensa AND reaccion <= :reaccion AND xp <= :xp" + where;
 //                + " AND edad >= " + (int) (criatura.getEdad() / 30);
+
+        Query query = session.createQuery(peticion);
+        query.setParameter("sexo", criatura.getSexo());
+        query.setParameter("raza", criatura.getRaza());
+        query.setParameter("elemento", criatura.getElemento());
+        query.setParameter("mutacion", criatura.getMutacion());
+        query.setParameter("fuerza", criatura.getFuerza() / 5);
+        query.setParameter("magia", criatura.getMagia() / 5);
+        query.setParameter("agilidad", criatura.getAgilidad() / 5);
+        query.setParameter("reflejos", criatura.getReflejos() / 5);
+        query.setParameter("constitucion", criatura.getConstitucion() / 5);
+        query.setParameter("defensa", criatura.getDefensa() / 5);
+        query.setParameter("reaccion", criatura.getReaccion() / 5);
+        query.setParameter("xp", criatura.getXp() / 5);
+        return query;
     }
 
     public void llenarMazmorras() {
@@ -1022,8 +1066,10 @@ public class CriaturaDAO {
 //        numUsuarios = 100;
 //        }
         //ALLWAYS MIN 100 CREATURES SELLING
-        String qCriaturas = "SELECT count(*) FROM CriaturaMazmorra WHERE tiempoVenta > " + new Date().getTime() / 1000;
-        int numCriaturas = ((Number) session.createQuery(qCriaturas).uniqueResult()).intValue();
+        String qCriaturas = "SELECT count(*) FROM CriaturaMazmorra WHERE tiempoVenta > :tiempoVenta";
+        Query query = session.createQuery(qCriaturas);
+        query.setParameter("tiempoVenta", new Date().getTime() / 1000);
+        int numCriaturas = ((Number) query.uniqueResult()).intValue();
 
         if (numCriaturas > 90) {
             return;
@@ -1042,8 +1088,10 @@ public class CriaturaDAO {
         //LIMPIEZA:
         //
         //SELECCIONAR CRIATURAS QUE NO HAN SIDO COMPRADAS
-        String peticionEliminar = "FROM CriaturaMazmorra WHERE usuario IS NULL AND tiempoVenta < " + new Date().getTime() / 1000;
-        List<CriaturaMazmorra> criaturas = session.createQuery(peticionEliminar).list();
+        String peticionEliminar = "FROM CriaturaMazmorra WHERE usuario IS NULL AND tiempoVenta < :tiempoVenta";
+        query = session.createQuery(peticionEliminar);
+        query.setParameter("tiempoVenta", new Date().getTime() / 1000);
+        List<CriaturaMazmorra> criaturas = query.list();
 
         //REDUCIR PRECIO CRIATURAS PARA SIGUIENTE VUELTA
         for (CriaturaMazmorra criatura : criaturas) {
@@ -1051,10 +1099,10 @@ public class CriaturaDAO {
             String[] pujas = criatura.getPujas().split(";");
             long precio = Long.parseLong(pujas[pujas.length].split(",")[1]);
 
-            String peores = criaturaPrecioPeor(criatura) + " AND precioMax > " + precio;
+            query = criaturaPrecioPeor(criatura, "", " AND precioMax > " + (int) precio);
 
-            if (session.createQuery(peores).list() != null) {
-                List<CriaturaPrecio> criaturasGuardar = session.createQuery(peores).list();
+            if (query.list() != null) {
+                List<CriaturaPrecio> criaturasGuardar = query.list();
 
                 for (int i = 0; i < criaturasGuardar.size(); i++) {
 
@@ -1094,11 +1142,11 @@ public class CriaturaDAO {
                 Criaturas asesino, victima;
 
                 if (!tipo.equals("academia")) {
-                    asesino = (Criaturas) loadCriatura(Long.parseLong(muerte[0]));
-                    victima = (Criaturas) loadCriatura(Long.parseLong(muerte[1]));
+                    asesino = loadCriatura(Long.parseLong(muerte[0]));
+                    victima = loadCriatura(Long.parseLong(muerte[1]));
                 } else {
-                    asesino = (Criaturas) loadCriaturaAcademia(Long.parseLong(muerte[0]));
-                    victima = (Criaturas) loadCriaturaAcademia(Long.parseLong(muerte[1]));
+                    asesino = loadCriaturaAcademia(Long.parseLong(muerte[0]));
+                    victima = loadCriaturaAcademia(Long.parseLong(muerte[1]));
                 }
 
                 asesino.setBajas(asesino.getBajas() + 1);
@@ -1113,13 +1161,13 @@ public class CriaturaDAO {
     public void destapar(List<Alineacion> alineacionLocal, List<Alineacion> alineacionVisitante) {
         if (null != alineacionLocal) {
             for (Alineacion local : alineacionLocal) {
-                CriaturaAcademia criatura = (CriaturaAcademia) loadCriaturaAcademia(local.getId());
+                CriaturaAcademia criatura = loadCriaturaAcademia(local.getId());
                 destaparValorCriatura(criatura);
             }
         }
         if (null != alineacionVisitante) {
             for (Alineacion visitante : alineacionVisitante) {
-                CriaturaAcademia criatura = (CriaturaAcademia) loadCriaturaAcademia(visitante.getId());
+                CriaturaAcademia criatura = loadCriaturaAcademia(visitante.getId());
                 destaparValorCriatura(criatura);
             }
         }
@@ -1299,7 +1347,7 @@ public class CriaturaDAO {
 
                                                         criatura.setEdad(20 + t);
 
-                                                        save((CriaturaPrecio) criatura);
+                                                        save(criatura);
 
                                                         if (i % 50 == 0) {
                                                             session.flush();

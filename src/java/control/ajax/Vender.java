@@ -20,7 +20,7 @@ public class Vender extends ActionSupport {
         Usuario usuario = usuarioDAO.loadUsuario(userId);
         
         String peticion = "SELECT count(*) FROM Criatura WHERE usuario = " + userId;
-        if (((Long) session.createQuery(peticion).uniqueResult()).intValue() < 6) {
+        if (((Number) session.createQuery(peticion).uniqueResult()).intValue() < 6) {
 
             session.close();
             result = "No puedes tener menos de 5 criaturas!";

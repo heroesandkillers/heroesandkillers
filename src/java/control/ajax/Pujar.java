@@ -48,7 +48,7 @@ public class Pujar extends ActionSupport {
 //        int time = (int) (date.getTime() / 1000);
 //        int pujaResuelta = time - 259200;
         String peticion = "SELECT count(*) FROM Criatura WHERE usuario = " + comprador.getId();
-        if (((Long) session.createQuery(peticion).uniqueResult()).intValue() > 19) {
+        if (((Number) session.createQuery(peticion).uniqueResult()).intValue() > 19) {
             session.close();
             result = "Has llegado al límite de criaturas!";
             return SUCCESS;

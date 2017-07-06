@@ -7,6 +7,7 @@ import model.hibernate.MensajeJuego;
 import model.hibernate.MensajeUsuario;
 import model.hibernate.MensajePrensa;
 import model.hibernate.Usuario;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -71,30 +72,36 @@ public class MensajeDAO {
     }
 
     public List<MensajePrensa> getMensajesPrensa(int division) {
-        String peticion = "FROM MensajePrensa WHERE division = " + division;
-        List<MensajePrensa> mensajes = session.createQuery(peticion).list();
+        String peticion = "FROM MensajePrensa WHERE division = :division ";
+        Query query = session.createQuery(peticion);
+        query.setParameter("division", division);
+        List<MensajePrensa> mensajes = query.list();
         return mensajes;
     }
 
     public List<MensajeUsuario> getMensajesUsuario(long id) {
-
-        String peticion = "FROM MensajeUsuario WHERE emisor = " + id + " OR receptor = " + id + "";
-        List<MensajeUsuario> mensajes = session.createQuery(peticion).list();
+        String peticion = "FROM MensajeUsuario WHERE emisor = :id OR receptor = :id";
+        Query query = session.createQuery(peticion);
+        query.setParameter("id", id);
+        List<MensajeUsuario> mensajes = query.list();
 
         return mensajes;
     }
 
     public List<MensajeJuego> getMensajesJuego(long id) {
-
-        String peticion = "FROM MensajeUsuario WHERE emisor = " + id + " OR receptor = " + id + "";
-        List<MensajeJuego> mensajes = session.createQuery(peticion).list();
+        String peticion = "FROM MensajeUsuario WHERE emisor = :id OR receptor = :id";
+        Query query = session.createQuery(peticion);
+        query.setParameter("id", id);
+        List<MensajeJuego> mensajes = query.list();
 
         return mensajes;
     }
 
     public int getMensajesNuevos(long id) {
-        String peticion = "SELECT count(*) FROM MensajeUsuario WHERE receptor = " + id + " AND leido = false";
-        return (int) ((Number) session.createQuery(peticion).uniqueResult()).intValue();
+        String peticion = "SELECT count(*) FROM MensajeUsuario WHERE receptor = :id AND leido = false";
+        Query query = session.createQuery(peticion);
+        query.setParameter("id", id);
+        return ((Number) query.uniqueResult()).intValue();
     }
 
     public void setPremioBatalla(Usuario ganador, String perdedor, int premio) {

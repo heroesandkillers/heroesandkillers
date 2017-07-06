@@ -2,6 +2,7 @@ package model.DAO;
 
 import java.util.List;
 import model.hibernate.Traspaso;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -16,9 +17,11 @@ public class TraspasoDAO {
     public Traspaso loadTraspaso(long criaturaId) {
         return (Traspaso) session.createCriteria(Traspaso.class).add(Restrictions.eq("criaturaId", criaturaId)).uniqueResult();
     }
-    
+
     public List<Traspaso> getTraspasos(int usuarioId) {
-        String peticion = "FROM Traspaso WHERE comprador = " + usuarioId + " OR vendedor = " + usuarioId;
-        return session.createQuery(peticion).list();
+        String peticion = "FROM Traspaso WHERE comprador = :usuarioId OR vendedor = :usuarioId";
+        Query query = session.createQuery(peticion);
+        query.setParameter("usuarioId", usuarioId);
+        return query.list();
     }
 }

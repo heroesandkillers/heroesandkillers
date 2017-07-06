@@ -31,19 +31,19 @@ public class BatallaDAO {
         return batalla;
     }
 
-    public void save(Object object) {
+    private void save(Object object) {
         Transaction t = session.beginTransaction();
         session.save(object);
         t.commit();
     }
 
-    public void update(Object object) {
+    private void update(Object object) {
         Transaction t = session.beginTransaction();
         session.update(object);
         t.commit();
     }
 
-    public void delete(Object object) {
+    private void delete(Object object) {
         Transaction t = session.beginTransaction();
         session.delete(object);
         t.commit();
@@ -67,8 +67,10 @@ public class BatallaDAO {
     }
 
     public void vaciarUltimasBatallas(Division division) {
-        String peticion = "FROM Batalla WHERE fecha = (SELECT max(fecha) FROM Batalla WHERE calculos != 0 AND division = " + division + ") AND division = " + division;
-        List<Batalla> batallas = session.createQuery(peticion).list();
+        String peticion = "FROM Batalla WHERE fecha = (SELECT max(fecha) FROM Batalla WHERE calculos != 0 AND division = :division) AND division = :division";
+        Query query = session.createQuery(peticion);
+        query.setParameter("division", division);
+        List<Batalla> batallas = query.list();
 
         for (Batalla batalla : batallas) {
             batalla.setAlinLoc(null);
@@ -168,23 +170,29 @@ public class BatallaDAO {
         cal.set(Calendar.DAY_OF_MONTH, 1);
         long limit = cal.getTimeInMillis() / 1000;
 
-        String peticion = "DELETE FROM Batalla WHERE fecha < " + limit;
-        session.createQuery(peticion);
+        String peticion = "DELETE FROM Batalla WHERE fecha < :limit";
+        Query query = session.createQuery(peticion);
+        query.setParameter("limit", limit);
+        query.executeUpdate();
     }
 
     public void eliminarBatallasCalendario(int division) {
-        String peticion = "DELETE FROM Batalla WHERE division = " + division;
-        session.createQuery(peticion);
+        String peticion = "DELETE FROM Batalla WHERE division = :division";
+        Query query = session.createQuery(peticion);
+        query.setParameter("division", division);
+        query.executeUpdate();
     }
 
     public void eliminarBatallas() {
         String peticion = "DELETE FROM Batalla";
-        session.createQuery(peticion);
+        session.createQuery(peticion).executeUpdate();
     }
 
     public void vaciarResultadosDivision(int division) {
-        String peticion = "FROM Usuario WHERE division = " + division;
-        List<Usuario> usuarios = session.createQuery(peticion).list();
+        String peticion = "FROM Usuario WHERE division = :division";
+        Query query = session.createQuery(peticion);
+        query.setParameter("division", division);
+        List<Usuario> usuarios = query.list();
         for (Usuario usuario : usuarios) {
             usuario.setPuntos("0,0-0");
         }
@@ -241,17 +249,19 @@ public class BatallaDAO {
         return true;
     }
 
-    public int getLastDiaBatalla(int division) {
-        String peticion = "SELECT max(fecha) FROM Batalla WHERE division = " + division + " AND tipo = 'liga'";
+    private int getLastDiaBatalla(int division) {
+        String peticion = "SELECT max(fecha) FROM Batalla WHERE division = :division AND tipo = 'liga'";
+        Query query = session.createQuery(peticion);
+        query.setParameter("division", division);
 
-        if (session.createQuery(peticion).uniqueResult() == null) {
+        if (query.uniqueResult() == null) {
             return 0;
         } else {
-            return ((Integer) session.createQuery(peticion).uniqueResult()).intValue();
+            return ((Number) session.createQuery(peticion).uniqueResult()).intValue();
         }
     }
 
-    public int rotar(int numero, int operacion) {
+    private int rotar(int numero, int operacion) {
         int rotar = numero + operacion;
 
         if (rotar < 0) {
@@ -264,7 +274,7 @@ public class BatallaDAO {
         return rotar;
     }
 
-    public void crearBatallaCalendario(String tipo, int division, Usuario usuario1, Usuario usuario2, Calendar inicio, int jornada) {
+    private void crearBatallaCalendario(String tipo, int division, Usuario usuario1, Usuario usuario2, Calendar inicio, int jornada) {
         DivisionDAO divisionDAO = new DivisionDAO(session);
         Division div = divisionDAO.getDivision(division);
 
@@ -328,7 +338,7 @@ public class BatallaDAO {
         save(batalla2);
     }
 
-    public void crearBatallaAcademia(int division, Usuario usuario1, Usuario usuario2, Calendar inicio, int jornada) {
+    private void crearBatallaAcademia(int division, Usuario usuario1, Usuario usuario2, Calendar inicio, int jornada) {
         DivisionDAO divisionDAO = new DivisionDAO(session);
         Division div = divisionDAO.getDivision(division);
         Date today = new Date();
@@ -365,7 +375,7 @@ public class BatallaDAO {
         }
     }
 
-    public void crearBatallaCalendario(String tipo, int division, Usuario usuario1, Usuario usuario2, int dia) {
+    private void crearBatallaCalendario(String tipo, int division, Usuario usuario1, Usuario usuario2, int dia) {
         DivisionDAO divisionDAO = new DivisionDAO(session);
         Division div = divisionDAO.getDivision(division);
 
@@ -379,7 +389,7 @@ public class BatallaDAO {
         save(batalla);
     }
 
-    public String resultadoRandom(Batalla batalla) {
+    private String resultadoRandom(Batalla batalla) {
         Usuario usuarioLocal = batalla.getEqLoc();
         Usuario usuarioVisitante = batalla.getEqVis();
 
@@ -417,13 +427,17 @@ public class BatallaDAO {
     }
 
     public List<Batalla> getBatallasAcademia(int usuarioId) {
-        String peticionBatallas = "FROM Batalla WHERE tipo = 'academia' AND calculos > 0 AND (eqLoc = '" + usuarioId + "' OR eqVis = '" + usuarioId + "')";
-        return session.createQuery(peticionBatallas).list();
+        String peticionBatallas = "FROM Batalla WHERE tipo = 'academia' AND calculos > 0 AND (eqLoc = :usuarioId OR eqVis = :usuarioId)";
+        Query query = session.createQuery(peticionBatallas);
+        query.setParameter("usuarioId", usuarioId);
+        return query.list();
     }
 
     public List<Batalla> getBatallasDivision(int division) {
-        String peticionBatallas = "FROM Batalla WHERE division =" + division;
-        List<Batalla> batallas = session.createQuery(peticionBatallas).list();
+        String peticionBatallas = "FROM Batalla WHERE division = :division";
+        Query query = session.createQuery(peticionBatallas);
+        query.setParameter("division", division);
+        List<Batalla> batallas = query.list();
         return batallas;
     }
 
@@ -465,18 +479,26 @@ public class BatallaDAO {
         int today = (int) (new Date().getTime() / 1000);
 
         //LIGA con misma DIVISION
-        String peticion = "FROM Batalla WHERE calculos = 0 AND division = " + division + " AND fecha <= " + today; //liga y academia
-        List<Batalla> batallas = session.createQuery(peticion).list(); //without limit
+        String peticion = "FROM Batalla WHERE calculos = 0 AND division = :division AND fecha <= :today"; //liga y academia
+        Query query = session.createQuery(peticion);
+        query.setParameter("division", division);
+        query.setParameter("today", today);
+        List<Batalla> batallas = query.list(); //without limit
 
         if (batallas.isEmpty()) {//ACADEMIA con DIVISION diferente            
-            peticion = "FROM Batalla WHERE division = (SELECT min(division) FROM Batalla WHERE tipo = 'liga' AND calculos = 0 AND division <> " + division + " AND fecha <= " + today + ")"
-                    + " AND tipo = 'liga' AND calculos = 0 AND fecha <= " + today;
-            batallas = session.createQuery(peticion).setMaxResults(5).list();
+            peticion = "FROM Batalla WHERE division = (SELECT min(division) FROM Batalla WHERE tipo = 'liga' AND calculos = 0 AND division <> :division AND fecha <= :today)"
+                    + " AND tipo = 'liga' AND calculos = 0 AND fecha <= :today";
+            query = session.createQuery(peticion);
+            query.setParameter("division", division);
+            query.setParameter("today", today);
+            batallas = query.setMaxResults(5).list();
 
             if (batallas.isEmpty()) {//LIGA cualquiera
-                peticion = "FROM Batalla WHERE division = (SELECT min(division) FROM Batalla WHERE tipo = 'liga' AND calculos = 0 AND fecha <= " + today + ")"
-                        + " AND tipo = 'liga' AND calculos = 0 AND fecha <= " + today;
-                batallas = session.createQuery(peticion).setMaxResults(5).list();
+                peticion = "FROM Batalla WHERE division = (SELECT min(division) FROM Batalla WHERE tipo = 'liga' AND calculos = 0 AND fecha <= :today)"
+                        + " AND tipo = 'liga' AND calculos = 0 AND fecha <= :today";
+                query = session.createQuery(peticion);
+                query.setParameter("today", today);
+                batallas = query.setMaxResults(5).list();
 
                 if (batallas.isEmpty()) {//cualquiera DENUNCIADA
                     peticion = "FROM Batalla WHERE division = (SELECT min(division) FROM Batalla WHERE den > 0 AND calculos < 5)"
@@ -488,9 +510,11 @@ public class BatallaDAO {
                         cal.add(Calendar.HOUR_OF_DAY, -2);
                         int fecha = (int) (cal.getTimeInMillis() / 1000);
 
-                        peticion = "FROM Batalla WHERE division = (SELECT min(division) FROM Batalla WHERE tipo = 'academia' AND calculos = 0 AND fecha <= " + fecha + ")"
-                                + " AND tipo = 'academia' AND calculos = 0 AND fecha <= " + fecha;
-                        batallas = session.createQuery(peticion).setMaxResults(5).list();
+                        peticion = "FROM Batalla WHERE division = (SELECT min(division) FROM Batalla WHERE tipo = 'academia' AND calculos = 0 AND fecha <= :fecha)"
+                                + " AND tipo = 'academia' AND calculos = 0 AND fecha <= :fecha";
+                        query = session.createQuery(peticion);
+                        query.setParameter("fecha", fecha);
+                        batallas = query.setMaxResults(5).list();
                     }
                 }
             }
@@ -506,7 +530,7 @@ public class BatallaDAO {
                     batalla.setAlinLoc(gson.toJson(criaturaDAO.guardarEquipo(batalla.getTipo(), batalla.getEqLoc())));
                     batalla.setAlinVis(gson.toJson(criaturaDAO.guardarEquipo(batalla.getTipo(), batalla.getEqVis())));
 //                    update(batalla);
-                    Query query = session.createQuery("update Batalla set alinLoc = :alinLoc, alinVis = :alinVis WHERE id = :id");
+                    query = session.createQuery("update Batalla set alinLoc = :alinLoc, alinVis = :alinVis WHERE id = :id");
                     query.setParameter("alinLoc", batalla.getAlinLoc());
                     query.setParameter("alinVis", batalla.getAlinVis());
                     query.setParameter("id", batalla.getId());
@@ -536,16 +560,16 @@ public class BatallaDAO {
     }
 
     public List<Batalla> getBatallasUsuario(int division, int id) {
-        String peticion = "FROM Batalla WHERE division = " + division + " AND tipo = 'liga' AND (eqLoc = " + id + " OR eqVis = " + id + ")";
-        List<Batalla> list = new ArrayList();
+        String peticion = "FROM Batalla WHERE division = :division AND tipo = 'liga' AND (eqLoc = :id OR eqVis = :id)";
         Query query = session.createQuery(peticion);
-        if (query != null) {
-            try {
-                list = query.list();
-            } catch (Exception e) {
-                UsuarioDAO usuarioDAO = new UsuarioDAO(session);
-                usuarioDAO.repararUsuarios(division);
-            }
+        query.setParameter("division", division);
+        query.setParameter("id", id);
+        List<Batalla> list = new ArrayList();
+        try {
+            list = query.list();
+        } catch (Exception e) {
+            UsuarioDAO usuarioDAO = new UsuarioDAO(session);
+            usuarioDAO.repararUsuarios(division);
         }
         return list;
     }
@@ -574,18 +598,24 @@ public class BatallaDAO {
 
     public Batalla getUltimaBatallaCalculada(Usuario user) {
         String peticion = "FROM Batalla WHERE calculos > 0"
-                + "AND (eqLoc_id = " + user.getId() + " OR eqLoc_id = " + user.getId() + ") ORDER BY fecha DESC";
-        return (Batalla) session.createQuery(peticion).setMaxResults(1).uniqueResult();
+                + "AND (eqLoc_id = :userId OR eqLoc_id = :userId) ORDER BY fecha DESC";
+        Query query = session.createQuery(peticion);
+        query.setParameter("userId", user.getId());
+        return (Batalla) query.setMaxResults(1).uniqueResult();
     }
 
     public Batalla getBatalla(long id) {
-        String peticion = "FROM Batalla WHERE id = " + id;
-        return (Batalla) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Batalla WHERE id = :id";
+        Query query = session.createQuery(peticion);
+        query.setParameter("id", id);
+        return (Batalla) query.uniqueResult();
     }
 
-    public int getCountMapa(int division) {
-        String peticion = "SELECT count(*) FROM Batalla WHERE division = " + division;
-        int count = (int) ((Long) session.createQuery(peticion).uniqueResult()).longValue();
+    private int getCountMapa(int division) {
+        String peticion = "SELECT count(*) FROM Batalla WHERE division = :division";
+        Query query = session.createQuery(peticion);
+        query.setParameter("division", division);
+        int count = (int) ((Number) query.uniqueResult()).longValue();
         return count;
     }
 
@@ -631,8 +661,10 @@ public class BatallaDAO {
 //        return session.createCriteria(Batalla.class).add(Restrictions.eq("division", division)).add(Restrictions.eq("fecha", fecha)).list();
 //    }
     public List<Batalla> getCalendarioDivision(int division) {
-        String peticion = "FROM Batalla WHERE division = " + division + " ORDER BY fecha ASC";
-        List<Batalla> batallas = session.createQuery(peticion).list();
+        String peticion = "FROM Batalla WHERE division = :division ORDER BY fecha ASC";
+        Query query = session.createQuery(peticion);
+        query.setParameter("division", division);
+        List<Batalla> batallas = query.list();
         if (batallas.isEmpty()) {
             CheckCalendarioMapa(division);
             return getCalendarioDivision(division);
@@ -647,8 +679,10 @@ public class BatallaDAO {
         String resultado = estadisticas.getResultado();
         CriaturaDAO criaturaDAO = new CriaturaDAO(session);
 
-        String peticion = "FROM Batalla WHERE id = " + id;
-        Batalla batalla = (Batalla) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Batalla WHERE id = :id";
+        Query query = session.createQuery(peticion);
+        query.setParameter("id", id);
+        Batalla batalla = (Batalla) query.uniqueResult();
 
         if (batalla.getCalculos() == 0) { //es el primer resultado
             estadisticas.setCalculos(usuarioId + ",");
@@ -736,7 +770,7 @@ public class BatallaDAO {
         }
     }
 
-    public void asignarResultados(Batalla batalla, String resultado) {
+    private void asignarResultados(Batalla batalla, String resultado) {
         MensajeDAO mensajeDAO = new MensajeDAO(session);
 
         String[] arrayResultado = resultado.split("-");
@@ -797,8 +831,10 @@ public class BatallaDAO {
     public void corregirResultados(long id, EstadisticasBatalla anterior, EstadisticasBatalla nuevo) {
         UsuarioDAO usuarioDAO = new UsuarioDAO(session);
 
-        String peticion = "FROM Batalla WHERE id = " + id;
-        Batalla batalla = (Batalla) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Batalla WHERE id = :id";
+        Query query = session.createQuery(peticion);
+        query.setParameter("id", id);
+        Batalla batalla = (Batalla) query.uniqueResult();
 
         String[] arrayAnterior = anterior.getResultado().split("-");
         String[] arrayNuevo = nuevo.getResultado().split("-");
@@ -931,8 +967,11 @@ public class BatallaDAO {
     }
 
     public void rectificarPremios(int inicio, int fin) {
-        String peticion = "FROM MensajeJuego WHERE fecha BETWEEN '" + inicio + "' AND '" + fin + "'";
-        List<MensajeJuego> mensajes = session.createQuery(peticion).list();
+        String peticion = "FROM MensajeJuego WHERE fecha BETWEEN :inicio AND :fin";
+        Query query = session.createQuery(peticion);
+        query.setParameter("inicio", inicio);
+        query.setParameter("fin", fin);
+        List<MensajeJuego> mensajes = query.list();
 
         Usuario usuario;
         int valor;
@@ -948,8 +987,10 @@ public class BatallaDAO {
     }
 
     public void setDenuncia(long id) {
-        String peticion = "FROM Batalla WHERE id = " + id;
-        Batalla batalla = (Batalla) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Batalla WHERE id = :id";
+        Query query = session.createQuery(peticion);
+        query.setParameter("id", id);
+        Batalla batalla = (Batalla) query.uniqueResult();
         if (batalla.getDen() == null) {
             batalla.setDen(1);
         } else {

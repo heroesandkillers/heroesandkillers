@@ -3,6 +3,7 @@ package model.DAO;
 import java.util.Date;
 import java.util.List;
 import model.hibernate.Tiempo;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -25,16 +26,20 @@ public class TiempoDAO {
 
     public Tiempo loadTiempo(String nombreId) {
 
-        String peticion = "FROM Tiempo WHERE nombreId = '" + nombreId + "'";
-        Tiempo tiempo = (Tiempo) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Tiempo WHERE nombreId = :nombreId";
+        Query query = session.createQuery(peticion);
+        query.setParameter("nombreId", nombreId);
+        Tiempo tiempo = (Tiempo) query.uniqueResult();
 
         return tiempo;
     }
 
     public void createTiempo(String nombreId) {
 
-        String peticion = "FROM Tiempo WHERE nombreId = '" + nombreId + "'";
-        Tiempo tiempo = (Tiempo) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Tiempo WHERE nombreId = :nombreId";
+        Query query = session.createQuery(peticion);
+        query.setParameter("nombreId", nombreId);
+        Tiempo tiempo = (Tiempo) query.uniqueResult();
 
         if (tiempo == null) {
             tiempo = new Tiempo();
@@ -54,21 +59,16 @@ public class TiempoDAO {
         t.commit();
     }
 
-    public boolean comprobar(int editorId, String nombreId) {
-
+    private boolean comprobar(int editorId, String nombreId) {
         boolean comprobar = false;
-
         Tiempo tiempo = loadTiempo(nombreId);
-
         if (tiempo.getEstado().equals("reservado") && tiempo.getEditorId() == editorId) {
-
             comprobar = true;
         }
         return comprobar;
     }
 
     public void finalizar(String nombreId) {
-
         Date date = new Date();
         long time = date.getTime();
         int dias = (int) (time / 86400000);

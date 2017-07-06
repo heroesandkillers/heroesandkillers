@@ -5,6 +5,7 @@ import java.util.List;
 import model.hibernate.Division;
 import model.hibernate.HibernateUtil;
 import model.hibernate.Usuario;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -18,7 +19,7 @@ public class DivisionDAO {
         this.session = session;
     }
 
-    public Division loadDivision(int division) {
+    private Division loadDivision(int division) {
         Transaction t = session.beginTransaction();
         Division object = (Division) session.load(Division.class, division);
         t.commit();
@@ -27,8 +28,10 @@ public class DivisionDAO {
 
     //OBJETO DIVISION
     public Division getDivision(int division) {
-        String peticion = "FROM Division WHERE division = " + division;
-        Division div = (Division) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Division WHERE division = :division ";
+        Query query = session.createQuery(peticion);
+        query.setParameter("division", division);
+        Division div = (Division) query.uniqueResult();
 
         if (div == null) {
             System.out.println("division " + division + " not have Division Object: setting new Division()");
@@ -39,13 +42,13 @@ public class DivisionDAO {
         return div;
     }
 
-    public void save(Object object) {
+    private void save(Object object) {
         Transaction t = session.beginTransaction();
         session.save(object);
         t.commit();
     }
 
-    public void update(Object object) {
+    private void update(Object object) {
         Transaction t = session.beginTransaction();
         session.update(object);
         t.commit();
@@ -93,7 +96,7 @@ public class DivisionDAO {
         return subdivision - subDivAnt;
     }
 
-    public int subDivisiones(int division) {
+    private int subDivisiones(int division) {
         int subDivisionesAnteriores = 0;
         for (int i = 1; i <= division; i++) {
             subDivisionesAnteriores = subDivisionesAnteriores + (int) Math.pow(subDiv - 1, i - 1);
@@ -101,25 +104,25 @@ public class DivisionDAO {
         return subDivisionesAnteriores;
     }
 
-    public List<Integer> numerosDivision(int division) {
-
-        List<Integer> numerosDivision = new ArrayList<Integer>();
-
-        int partesDivision = (int) Math.pow(subDiv, division - 1);
-
-        int numeroDivision = 1;
-
-        for (int i = 0; i < division - 1; i++) {
-            numeroDivision = numeroDivision + (int) Math.pow(subDiv, i);
-        }
-
-        for (int i = 0; i < partesDivision; i++) {
-            numerosDivision.add(numeroDivision);
-            numeroDivision++;
-        }
-
-        return numerosDivision;
-    }
+//    private List<Integer> numerosDivision(int division) {
+//
+//        List<Integer> numerosDivision = new ArrayList<Integer>();
+//
+//        int partesDivision = (int) Math.pow(subDiv, division - 1);
+//
+//        int numeroDivision = 1;
+//
+//        for (int i = 0; i < division - 1; i++) {
+//            numeroDivision = numeroDivision + (int) Math.pow(subDiv, i);
+//        }
+//
+//        for (int i = 0; i < partesDivision; i++) {
+//            numerosDivision.add(numeroDivision);
+//            numeroDivision++;
+//        }
+//
+//        return numerosDivision;
+//    }
 
     public int divisionAbsoluta(int subdivision) {
 
@@ -192,22 +195,22 @@ public class DivisionDAO {
         return posicion;
     }
 
-    public int maxDivision() {
-
-        int subdivision = numSubDivisiones();
-        int division = 0;
-        int resultado = 0;
-        boolean siguiente = true;
-        while (siguiente == true) {
-            division++;
-            if (resultado + (int) Math.pow(subDiv, division) > subdivision) {
-                siguiente = false;
-            } else {
-                resultado = resultado + (int) Math.pow(subDiv, division);
-            }
-        }
-        return division;
-    }
+//    public int maxDivision() {
+//
+//        int subdivision = numSubDivisiones();
+//        int division = 0;
+//        int resultado = 0;
+//        boolean siguiente = true;
+//        while (siguiente == true) {
+//            division++;
+//            if (resultado + (int) Math.pow(subDiv, division) > subdivision) {
+//                siguiente = false;
+//            } else {
+//                resultado = resultado + (int) Math.pow(subDiv, division);
+//            }
+//        }
+//        return division;
+//    }
 
     public void setMapa(int division, String mapa, byte[] back) {
         Division div = loadDivision(division);
@@ -219,16 +222,18 @@ public class DivisionDAO {
         update(div);
     }
 
-    public int getEmptyDivision() {
-        int division = 0;
-        long count = 10;
-        while (count > 9) {
-            division++;
-            String peticion = "SELECT count(*) FROM Usuario WHERE division = " + division;
-            count = (Long) session.createQuery(peticion).uniqueResult();
-        }
-        return division;
-    }
+//    public int getEmptyDivision() {
+//        int division = 0;
+//        long count = 10;
+//        while (count > 9) {
+//            division++;
+//            String peticion = "SELECT count(*) FROM Usuario WHERE division = :division";
+//            Query query = session.createQuery(peticion);
+//            query.setParameter("division", division);
+//            count = (Long) session.createQuery(peticion).uniqueResult();
+//        }
+//        return division;
+//    }
 
     public void checkDivision(int div, int users) {
         if (users < leagueUsers) {

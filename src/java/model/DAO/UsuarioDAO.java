@@ -10,6 +10,7 @@ import model.hibernate.Phpbb_user;
 import model.hibernate.Trofeo;
 import model.hibernate.Usuario;
 import mysql.Mysql;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
@@ -24,9 +25,11 @@ public class UsuarioDAO {
     }
 
     public int getUsuarioId(Phpbb_user phpbb_user) {
-        String peticion = "FROM Usuario WHERE phpbb_user = " + phpbb_user.getUser_id();
+        String peticion = "FROM Usuario WHERE phpbb_user = :phpbb_user";
         try {
-            return ((Usuario) session.createQuery(peticion).uniqueResult()).getId();
+            Query query = session.createQuery(peticion);
+            query.setParameter("phpbb_user", phpbb_user.getUser_id());
+            return ((Usuario) query.uniqueResult()).getId();
         } catch (Exception e) {
             System.out.println("INFO: No existe el usuario phpbb_user con id = " + phpbb_user.getUser_id() + " en el juego. getUsuarioId() en UsuarioDAO");
             return crearUsuario(phpbb_user).getId();
@@ -54,15 +57,19 @@ public class UsuarioDAO {
     }
 
     public Usuario getUsuario(String user) {
-        String peticion = "FROM Usuario WHERE nombreId='" + user + "'";
-        Usuario usuario = (Usuario) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Usuario WHERE nombreId = :user";
+        Query query = session.createQuery(peticion);
+        query.setParameter("user", user);
+        Usuario usuario = (Usuario) query.uniqueResult();
         usuario.username = getName(usuario);
         return usuario;
     }
 
     public Usuario loadUsuarioPhpbb(Phpbb_user phpbb_user) {
-        String peticion = "FROM Usuario WHERE phpbb_user=" + phpbb_user.getUser_id();
-        Usuario usuario = (Usuario) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Usuario WHERE phpbb_user = :phpbb_user ";
+        Query query = session.createQuery(peticion);
+        query.setParameter("phpbb_user", phpbb_user.getUser_id());
+        Usuario usuario = (Usuario) query.uniqueResult();
 
         if (usuario == null) {
             if (!existeUsuario(phpbb_user.getUser_id())) {
@@ -77,8 +84,10 @@ public class UsuarioDAO {
     }
 
     public Usuario loadUsuarioPosicion(int posicion) {
-        String peticion = "FROM Usuario WHERE posicion = " + posicion;
-        Usuario usuario = (Usuario) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Usuario WHERE posicion = :posicion";
+        Query query = session.createQuery(peticion);
+        query.setParameter("posicion", posicion);
+        Usuario usuario = (Usuario) query.uniqueResult();
         if (null == usuario) {
             //throw new Error("Usuario no cargado");
             return null;
@@ -110,9 +119,11 @@ public class UsuarioDAO {
 //        save(usuario);
 //    }
     public List<Usuario> getUsuariosDivision(int division) {
-        String peticion = "FROM Usuario WHERE division = " + division;
+        String peticion = "FROM Usuario WHERE division = :division ";
         try {
-            List<Usuario> usuarios = session.createQuery(peticion).list();
+            Query query = session.createQuery(peticion);
+            query.setParameter("division", division);
+            List<Usuario> usuarios = query.list();
             return usuarios;
         } catch (Exception e) {
             throw new Error("La división = " + division + " no existe: " + e);
@@ -158,8 +169,10 @@ public class UsuarioDAO {
 
     public boolean existeUsuario(int userId) {
         boolean existe = false;
-        String peticion = "FROM Usuario WHERE id='" + userId + "'";
-        if (session.createQuery(peticion).uniqueResult() != null) {
+        String peticion = "FROM Usuario WHERE id = :userId";
+        Query query = session.createQuery(peticion);
+        query.setParameter("userId", userId);
+        if (query.uniqueResult() != null) {
             existe = true;
         }
         return existe;
@@ -178,8 +191,10 @@ public class UsuarioDAO {
         int division = divisionDAO.divisionAbsolutaByPosicion(posicion);
         int posRelativa = posicion + divisionDAO.posicion0Division(division);
         if (posRelativa == 1) {
-            String peticion = "FROM Usuario WHERE posicion >= " + posicion;
-            if (session.createQuery(peticion).list().isEmpty()) {                
+            String peticion = "FROM Usuario WHERE posicion >= :posicion";
+            Query query = session.createQuery(peticion);
+            query.setParameter("peticion", peticion);
+            if (query.list().isEmpty()) {
                 rellenarUsuarios(division);
             }
         }
@@ -245,7 +260,7 @@ public class UsuarioDAO {
         }
 
     }
-    
+
     public void rellenarUsuarios(int division) {
         DivisionDAO divisionDAO = new DivisionDAO(session);
         int numero = divisionDAO.numUsuariosDivision(division);
@@ -256,10 +271,10 @@ public class UsuarioDAO {
         int posRelativa = 1;
         DivisionDAO divisionDAO = new DivisionDAO(session);
         int posicion = divisionDAO.posicion0Division(division);
-        CriaturaDAO criaturaDAO = new CriaturaDAO(session);        
+        CriaturaDAO criaturaDAO = new CriaturaDAO(session);
 
         for (int i = 0; i < numero; i++) {
-            
+
             //CHECK POSITION USER NOT EXISTS YET
             Mysql mysql = new Mysql();
             int[] params = {posicion};
@@ -273,7 +288,7 @@ public class UsuarioDAO {
                 throw new Error("rellenarUsuarios ERROR");
             }
 
-            Usuario usuario = new Usuario();            
+            Usuario usuario = new Usuario();
             usuario.setDivision(divisionDAO.subDivision(division, posRelativa));
             usuario.setPosicion(posicion);
             usuario.setId(null);
@@ -294,9 +309,11 @@ public class UsuarioDAO {
     public void ordenarPosiciones(int division) {
 
         DivisionDAO divisionDAO = new DivisionDAO(session);
-        String peticion = "FROM Usuario WHERE division = " + division;
+        String peticion = "FROM Usuario WHERE division = :division";
         try {
-            List<Usuario> usuarios = session.createQuery(peticion).list();
+            Query query = session.createQuery(peticion);
+            query.setParameter("division", division);
+            List<Usuario> usuarios = query.list();
 
             int[] arrayPosiciones = new int[usuarios.size()];
 
@@ -383,8 +400,10 @@ public class UsuarioDAO {
         Date date = new Date();
         int dias = (int) (date.getTime() / 86400000);
 
-        String peticion = "FROM Usuario WHERE division = " + division + " AND posicion = (SELECT min(posicion) FROM Usuario WHERE division = " + division + ")";
-        Usuario usuario = (Usuario) session.createQuery(peticion).uniqueResult();
+        String peticion = "FROM Usuario WHERE division = :division AND posicion = (SELECT min(posicion) FROM Usuario WHERE division = :division)";
+        Query query = session.createQuery(peticion);
+        query.setParameter("division", division);
+        Usuario usuario = (Usuario) query.uniqueResult();
 
         Trofeo trofeo = new Trofeo();
         trofeo.setUsuario(usuario);

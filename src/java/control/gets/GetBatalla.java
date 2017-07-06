@@ -3,7 +3,6 @@ package control.gets;
 import model.DAO.BatallaDAO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import model.hibernate.*;
 import java.util.List;
